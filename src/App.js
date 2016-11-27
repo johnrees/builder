@@ -2,6 +2,8 @@ import React from 'react'
 import React3 from 'react-three-renderer'
 import THREE from 'three'
 
+const OrbitControls = require('three-orbit-controls')(THREE)
+
 export default class Simple extends React.Component {
   constructor(props, context) {
     super(props, context)
@@ -9,21 +11,23 @@ export default class Simple extends React.Component {
       cubeRotation: new THREE.Euler(),
     }
 
-    this._onAnimate = this._onAnimate.bind(this)
+    this.cameraPosition = new THREE.Vector3(5, 5, 5)
   }
 
-  _onAnimate() {
-    this.setState({
-      cubeRotation: new THREE.Euler(
-        this.state.cubeRotation.x + 0.1,
-        this.state.cubeRotation.y + 0.1,
-        0
-      ),
-    })
+  componentWillMount() {
   }
 
   componentDidMount() {
-    this.cameraPosition = new THREE.Vector3(0, 0, 5)
+    const controls = new OrbitControls(this.refs.camera, document.getElementById('root'))
+    controls.minPolarAngle = Math.PI/6
+    controls.maxPolarAngle = Math.PI/2.1
+    controls.maxDistance = 9
+    controls.minDistance = 4
+    this.controls = controls
+  }
+
+  componentWillUnmount() {
+    delete this.controls
   }
 
   render() {
@@ -35,10 +39,12 @@ export default class Simple extends React.Component {
         mainCamera="camera"
         width={width}
         height={height}
-        onAnimate={this._onAnimate}>
+        antialias={true}
+        clearColor={0xF6F6F6} >
         <scene>
           <perspectiveCamera
             name="camera"
+            ref="camera"
             fov={75}
             aspect={width / height}
             near={0.1}
@@ -46,9 +52,7 @@ export default class Simple extends React.Component {
 
             position={this.cameraPosition}
           />
-          <mesh
-            rotation={this.state.cubeRotation}
-          >
+          <mesh rotation={this.state.cubeRotation} >
             <boxGeometry
               width={1}
               height={1}
