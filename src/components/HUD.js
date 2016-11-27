@@ -1,13 +1,14 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { buildingAreaSelector } from '../selectors/building'
 
 class HUD extends React.Component {
 
   render() {
     return(
       <div id='hud'>
-        <p>area: {this.props.area}</p>
-        <p>total: {this.props.total}</p>
+        <p>area: {this.props.area.toFixed(1)}m²</p>
+        <p>total: £{this.props.total.toFixed(2)}</p>
       </div>
     )
   }
@@ -16,7 +17,7 @@ class HUD extends React.Component {
 
 const mapStateToProps = (state) => ({
   total: state.costs.total,
-  area: state.building.length
+  area: buildingAreaSelector(state)
 })
 
 const mapDispatchToProps = (dispatch) => ({

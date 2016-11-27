@@ -14,3 +14,25 @@ export const getCosts = () => {
       })
   }
 }
+
+export const setLength = (payload) => {
+  return {
+    type: "SET_LENGTH",
+    payload: payload
+  }
+}
+
+export const setFrameHeight = (payload) => {
+  return {
+    type: "SET_FRAME_HEIGHT",
+    payload: payload
+  }
+}
+
+export const setFrameWidth = (payload) => {
+  return {
+    type: "SET_FRAME_WIDTH",
+    payload: payload
+  }
+}
+

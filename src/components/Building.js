@@ -12,8 +12,8 @@ class Building extends React.Component {
     return (
       <mesh>
         <boxGeometry
-          width={1}
-          height={1}
+          width={this.props.width}
+          height={this.props.height}
           depth={this.props.length} />
         <meshBasicMaterial color={0x00ff00} />
       </mesh>
@@ -23,7 +23,9 @@ class Building extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  length: state.building.length
+  length: state.building.length,
+  width: state.frame.width,
+  height: state.frame.height
 })
 
 const mapDispatchToProps = (dispatch) => ({

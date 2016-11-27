@@ -3,6 +3,7 @@ import React3 from 'react-three-renderer'
 import THREE from 'three'
 import HUD from './HUD'
 import Building from './Building'
+import Controls from './Controls'
 
 const OrbitControls = require('three-orbit-controls')(THREE)
 
@@ -54,6 +55,7 @@ export default class Simple extends React.Component {
               far={1000}
               position={this.cameraPosition}
             />
+            <Controls store={this.props.store} />
             <Building store={this.props.store} />
           </scene>
         </React3>
