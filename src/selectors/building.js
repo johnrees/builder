@@ -2,7 +2,7 @@ import { createSelector } from 'reselect'
 
 const lengthSelector = state => state.building.length
 const frameWidthSelector = state => state.frame.width
-// const frameHeightSelector = state => state.frame.height
+const frameHeightSelector = state => state.frame.height
 
 export const buildingAreaSelector = createSelector(
   lengthSelector,
@@ -65,4 +65,17 @@ export const claddingColorSelector = createSelector(
 export const roofingColorSelector = createSelector(
   roofingMaterialSelector,
   (material) => MATERIALS.ROOFING[material].color
+)
+
+export const roofingAreaSelector = createSelector(
+  lengthSelector,
+  frameWidthSelector,
+  frameHeightSelector,
+  (length, width, height) => (Math.hypot(width/2, height/2) * length) * 2
+)
+
+export const roofingTotalSelector = createSelector(
+  roofingAreaSelector,
+  roofingMaterialSelector,
+  (area, material) => area * MATERIALS.ROOFING[material].cost
 )
