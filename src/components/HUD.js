@@ -2,6 +2,7 @@ import React from 'react'
 import axios from 'axios'
 
 export default class HUD extends React.Component {
+
   constructor(props, state) {
     super(props, state)
     this.state = {
@@ -10,21 +11,23 @@ export default class HUD extends React.Component {
     }
     this.setData = this.setData.bind(this)
   }
+
   componentDidMount() {
     axios.get(`${process.env.REACT_APP_API_HOST}/costings.json`)
       .then((response) => {
         this.setData(response.data)
-      })
-      .catch((error) => {
+      }).catch((error) => {
         console.log(error);
       })
   }
+
   setData(data) {
     console.log(data)
     this.setState({
       total: data.total
     })
   }
+
   render() {
     return(
       <div id='hud'>
@@ -33,4 +36,5 @@ export default class HUD extends React.Component {
       </div>
     )
   }
+
 }

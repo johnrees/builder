@@ -54,10 +54,10 @@ export default class Simple extends React.Component {
               far={1000}
               position={this.cameraPosition}
             />
-            <Building />
+            <Building store={this.props.store} />
           </scene>
         </React3>
-        <HUD />
+        <HUD store={this.props.store} />
       </div>
     )
   }
