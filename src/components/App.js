@@ -1,6 +1,7 @@
 import React from 'react'
 import React3 from 'react-three-renderer'
 import THREE from 'three'
+import Stats from 'stats.js'
 import HUD from './HUD'
 import Building from './Building'
 import Controls from './Controls'
@@ -15,10 +16,27 @@ export default class Simple extends React.Component {
     }
 
     this.cameraPosition = new THREE.Vector3(5, 5, 5)
-    this.buildingPosition = new THREE.Vector3(0, 0, 0)
+
+    this._onAnimate = this._onAnimate.bind(this)
+    this.getRenderer = this.getRenderer.bind(this)
+    this.onWindowResize = this.onWindowResize.bind(this)
+  }
+
+  _onAnimate() {
+    this.stats.update()
+  }
+
+  getRenderer(renderer) {
+    this.renderer = renderer
   }
 
   componentWillMount() {
+  }
+
+  onWindowResize() {
+    this.refs.camera.aspect = window.innerWidth / window.innerHeight
+    this.refs.camera.updateProjectionMatrix()
+    this.renderer.setSize(window.innerWidth, window.innerHeight)
   }
 
   componentDidMount() {
@@ -28,10 +46,18 @@ export default class Simple extends React.Component {
     controls.maxDistance = 9
     controls.minDistance = 4
     this.controls = controls
+
+    this.stats = new Stats()
+    const container = document.getElementById('root')
+    container.appendChild(this.stats.domElement)
+
+    window.addEventListener( 'resize', this.onWindowResize, false )
   }
 
   componentWillUnmount() {
+    this.refs.controls.gui.destroy()
     delete this.controls
+    delete this.stats
   }
 
   render() {
@@ -44,6 +70,8 @@ export default class Simple extends React.Component {
           mainCamera="camera"
           width={width}
           height={height}
+          onAnimate={this._onAnimate}
+          onRendererUpdated={this.getRenderer}
           antialias={true}
           clearColor={0xF6F6F6}>
           <scene>
@@ -56,8 +84,8 @@ export default class Simple extends React.Component {
               far={1000}
               position={this.cameraPosition}
             />
-            <Controls store={this.props.store} />
-            <Building store={this.props.store} position={this.buildingPosition} />
+            <Controls store={this.props.store} ref='controls' />
+            <Building store={this.props.store} />
           </scene>
         </React3>
         <HUD store={this.props.store} />

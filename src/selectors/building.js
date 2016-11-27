@@ -62,6 +62,19 @@ export const claddingColorSelector = createSelector(
   (material) => MATERIALS.CLADDING[material].color
 )
 
+export const claddingAreaSelector = createSelector(
+  lengthSelector,
+  frameWidthSelector,
+  frameHeightSelector,
+  (length, width, height) => ((width*height) + (length*height))*2
+)
+
+export const claddingTotalSelector = createSelector(
+  claddingAreaSelector,
+  claddingMaterialSelector,
+  (area, material) => area * MATERIALS.CLADDING[material].cost
+)
+
 export const roofingColorSelector = createSelector(
   roofingMaterialSelector,
   (material) => MATERIALS.ROOFING[material].color
