@@ -1,10 +1,14 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { getCosts } from '../actions'
 
 class Building extends React.Component {
 
+  componentWillMount() {
+    this.props.getCosts()
+  }
+
   render() {
-    console.log(this.props)
     return (
       <mesh>
         <boxGeometry
@@ -23,6 +27,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
+  getCosts: () => { dispatch(getCosts()) }
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Building)
