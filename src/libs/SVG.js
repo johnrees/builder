@@ -28,13 +28,12 @@ export default class SVG {
     return mesh;
   }
 
-  transformSVGPath(pathStr) {
+  transformSVGPath(pathStr, reactThree=true) {
 
     const DIGIT_0 = 48, DIGIT_9 = 57, COMMA = 44, SPACE = 32, PERIOD = 46,
         MINUS = 45;
 
-    // var path = new THREE.Shape();
-    var path = []
+    var path = reactThree ? [] : new THREE.Shape()
 
     var idx = 1, len = pathStr.length, activeCmd,
         x = 0, y = 0, nx = 0, ny = 0, firstX = null, firstY = null,
@@ -107,23 +106,21 @@ export default class SVG {
         case 'M':
           x = eatNum();
           y = eatNum();
-          path.push(<moveTo x={x} y={y} key={guid()} />)
-          // path.moveTo(x, y);
+
+          reactThree ? path.push(<moveTo x={x} y={y} key={guid()} />) : path.moveTo(x, y)
           activeCmd = 'L';
           break;
         case 'm':
           x += eatNum();
           y += eatNum();
-          path.push(<moveTo x={x} y={y} />)
-          // path.moveTo(x, y);
+          reactThree ? path.push(<moveTo x={x} y={y} />) : path.moveTo(x, y);
           activeCmd = 'l';
           break;
         case 'Z':
         case 'z':
           canRepeat = false;
           if (x !== firstX || y !== firstY)
-            path.push(<lineTo x={firstX} y={firstY} key={guid()} />)
-            // path.lineTo(firstX, firstY);
+            reactThree ? path.push(<lineTo x={firstX} y={firstY} key={guid()} />) : path.lineTo(firstX, firstY)
           break;
           // - lines!
         case 'L':
@@ -131,8 +128,7 @@ export default class SVG {
         case 'V':
           nx = (activeCmd === 'V') ? x : eatNum();
           ny = (activeCmd === 'H') ? y : eatNum();
-          path.push(<lineTo x={nx} y={ny} key={guid()} />)
-          // path.lineTo(nx, ny);
+          reactThree ? path.push(<lineTo x={nx} y={ny} key={guid()} />) : path.lineTo(nx, ny)
           x = nx;
           y = ny;
           break;
@@ -141,8 +137,7 @@ export default class SVG {
         case 'v':
           nx = (activeCmd === 'v') ? x : (x + eatNum());
           ny = (activeCmd === 'h') ? y : (y + eatNum());
-          path.push(<lineTo x={nx} y={ny} key={guid()} />)
-          // path.lineTo(nx, ny);
+          reactThree ? path.push(<lineTo x={nx} y={ny} key={guid()} />) : path.lineTo(nx, ny);
           x = nx;
           y = ny;
           break;
@@ -157,8 +152,7 @@ export default class SVG {
           y2 = eatNum();
           nx = eatNum();
           ny = eatNum();
-          path.push(<bezierCurveTo cp1X={x1} cp1Y={y1} cp2X={x2} cp2Y={y2} x={nx} y={ny} key={guid()} />)
-          // path.bezierCurveTo(x1, y1, x2, y2, nx, ny);
+          reactThree ? path.push(<bezierCurveTo cp1X={x1} cp1Y={y1} cp2X={x2} cp2Y={y2} x={nx} y={ny} key={guid()} />) : path.bezierCurveTo(x1, y1, x2, y2, nx, ny);
           x = nx; y = ny;
           break;
         case 'c':
@@ -173,8 +167,7 @@ export default class SVG {
           y2 = y + eatNum();
           nx = x + eatNum();
           ny = y + eatNum();
-          path.push(<bezierCurveTo cp1X={x1} cp1Y={y1} cp2X={x2} cp2Y={y2} x={nx} y={ny} key={guid()} />)
-          // path.bezierCurveTo(x1, y1, x2, y2, nx, ny);
+          reactThree ? path.push(<bezierCurveTo cp1X={x1} cp1Y={y1} cp2X={x2} cp2Y={y2} x={nx} y={ny} key={guid()} />) : path.bezierCurveTo(x1, y1, x2, y2, nx, ny);
           x = nx; y = ny;
           break;
           // - quadratic bezier
@@ -187,8 +180,7 @@ export default class SVG {
           }
           nx = eatNum();
           ny = eatNum();
-          path.push(<quadraticCurveTo cpX={x1} cpY={y1} x={nx} y={ny} key={guid()} />)
-          // path.quadraticCurveTo(x1, y1, nx, ny);
+          reactThree ? path.push(<quadraticCurveTo cpX={x1} cpY={y1} x={nx} y={ny} key={guid()} />) : path.quadraticCurveTo(x1, y1, nx, ny);
           x = nx;
           y = ny;
           break;
@@ -202,8 +194,7 @@ export default class SVG {
           }
           nx = x + eatNum();
           ny = y + eatNum();
-          path.push(<quadraticCurveTo cpX={x1} cpY={y1} x={nx} y={ny} key={guid()} />)
-          // path.quadraticCurveTo(x1, y1, nx, ny);
+          reactThree ? path.push(<quadraticCurveTo cpX={x1} cpY={y1} x={nx} y={ny} key={guid()} />) : path.quadraticCurveTo(x1, y1, nx, ny);
           x = nx; y = ny;
           break;
           // - elliptical arc
@@ -256,8 +247,7 @@ export default class SVG {
           if (sf && deltaAng < 0)
             deltaAng += Math.PI * 2;
 
-          path.push(<absArc x={cx} y={cy} radius={rx} startAngle={startAng} endAngle={startAng + deltaAng} clockwise={sf} key={guid()} />)
-          // path.absarc(cx, cy, rx, startAng, startAng + deltaAng, sf);
+          reactThree ? path.push(<absArc x={cx} y={cy} radius={rx} startAngle={startAng} endAngle={startAng + deltaAng} clockwise={sf} key={guid()} />) : path.absarc(cx, cy, rx, startAng, startAng + deltaAng, sf);
           x = nx;
           y = ny;
           break;

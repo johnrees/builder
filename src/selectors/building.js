@@ -23,33 +23,33 @@ const MATERIALS = {
   CLADDING: {
     'RECYCLED_PLASTIC': {
       cost: 20,
-      color: 'thistle'
+      color: '#5A554F'
     },
     'LARCH': {
       cost: 40,
-      color: '#949494'
+      color: '#B7A98A'
     },
     'WEATHERBOARD': {
       cost: 25,
-      color: 'cadetblue'
+      color: '#C3C5C0'
     },
     'NONE': {
       cost: 0,
-      color: 'white'
+      color: 'red'
     }
   },
   ROOFING: {
     'STEEL': {
       cost: 25,
-      color: 'tomato'
+      color: '#B8B7BF'
     },
     'EPDM': {
       cost: 15,
-      color: 'khaki'
+      color: '#5B5D5C'
     },
     'NONE': {
       cost: 0,
-      color: 'white'
+      color: 'red'
     }
   }
 }
