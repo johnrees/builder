@@ -1,6 +1,8 @@
 import React from 'react'
 import React3 from 'react-three-renderer'
 import THREE from 'three'
+import HUD from './HUD'
+import Building from './Building'
 
 const OrbitControls = require('three-orbit-controls')(THREE)
 
@@ -35,35 +37,28 @@ export default class Simple extends React.Component {
     const height = window.innerHeight
 
     return (
-      <React3
-        mainCamera="camera"
-        width={width}
-        height={height}
-        antialias={true}
-        clearColor={0xF6F6F6} >
-        <scene>
-          <perspectiveCamera
-            name="camera"
-            ref="camera"
-            fov={75}
-            aspect={width / height}
-            near={0.1}
-            far={1000}
-
-            position={this.cameraPosition}
-          />
-          <mesh rotation={this.state.cubeRotation} >
-            <boxGeometry
-              width={1}
-              height={1}
-              depth={1}
+      <div id="container">
+        <React3
+          mainCamera="camera"
+          width={width}
+          height={height}
+          antialias={true}
+          clearColor={0xF6F6F6}>
+          <scene>
+            <perspectiveCamera
+              name="camera"
+              ref="camera"
+              fov={75}
+              aspect={width / height}
+              near={0.1}
+              far={1000}
+              position={this.cameraPosition}
             />
-            <meshBasicMaterial
-              color={0x00ff00}
-            />
-          </mesh>
-        </scene>
-      </React3>
+            <Building />
+          </scene>
+        </React3>
+        <HUD />
+      </div>
     )
   }
 }
