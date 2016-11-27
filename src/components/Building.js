@@ -10,7 +10,7 @@ class Building extends React.Component {
 
   render() {
     return (
-      <mesh>
+      <mesh position={this.props.position}>
         <boxGeometry
           width={this.props.width}
           height={this.props.height}

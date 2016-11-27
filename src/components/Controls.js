@@ -18,10 +18,10 @@ class Controls extends React.Component {
     let length = this.gui.add(editables, 'length', 2, 10).step(0.3)
     length.onChange(this.props.setLength)
 
-    let width = this.gui.add(editables, 'width', 2, 10).step(0.3)
+    let width = this.gui.add(editables, 'width', 2, 4).step(0.1)
     width.onChange(this.props.setWidth)
 
-    let height = this.gui.add(editables, 'height', 2, 10).step(0.3)
+    let height = this.gui.add(editables, 'height', 2, 4).step(0.1)
     height.onChange(this.props.setHeight)
   }
 

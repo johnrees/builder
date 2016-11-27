@@ -15,6 +15,7 @@ export default class Simple extends React.Component {
     }
 
     this.cameraPosition = new THREE.Vector3(5, 5, 5)
+    this.buildingPosition = new THREE.Vector3(0, 0, 0)
   }
 
   componentWillMount() {
@@ -56,7 +57,7 @@ export default class Simple extends React.Component {
               position={this.cameraPosition}
             />
             <Controls store={this.props.store} />
-            <Building store={this.props.store} />
+            <Building store={this.props.store} position={this.buildingPosition} />
           </scene>
         </React3>
         <HUD store={this.props.store} />
