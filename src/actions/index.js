@@ -36,3 +36,16 @@ export const setFrameWidth = (payload) => {
   }
 }
 
+export const setRoofing = (payload) => {
+  return {
+    type: "SET_ROOFING",
+    payload: payload
+  }
+}
+
+export const setCladding = (payload) => {
+  return {
+    type: "SET_CLADDING",
+    payload: payload
+  }
+}

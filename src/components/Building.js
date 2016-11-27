@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { getCosts } from '../actions'
+import { claddingColorSelector } from '../selectors/building'
 
 class Building extends React.Component {
 
@@ -15,7 +16,7 @@ class Building extends React.Component {
           width={this.props.width}
           height={this.props.height}
           depth={this.props.length} />
-        <meshBasicMaterial color={0x00ff00} />
+        <meshBasicMaterial color={this.props.claddingColor} />
       </mesh>
     )
   }
@@ -25,7 +26,8 @@ class Building extends React.Component {
 const mapStateToProps = (state) => ({
   length: state.building.length,
   width: state.frame.width,
-  height: state.frame.height
+  height: state.frame.height,
+  claddingColor: claddingColorSelector(state)
 })
 
 const mapDispatchToProps = (dispatch) => ({
