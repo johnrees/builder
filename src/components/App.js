@@ -38,11 +38,13 @@ export default class Simple extends React.Component {
     this.setMesh = this.setMesh.bind(this)
     this.setClippingHeight = this.setClippingHeight.bind(this)
     this.setLens = this.setLens.bind(this)
+    this.switchControls = this.switchControls.bind(this)
   }
 
   _onAnimate() {
     this.stats.update()
     TWEEN.update()
+    this.controls.update()
   }
 
   setClippingHeight(value) {
@@ -51,28 +53,37 @@ export default class Simple extends React.Component {
     }
   }
 
+  switchControls(lock2D) {
+    if (lock2D) {
+      this.refs.camera.position.set(0,10,0)
+      this.controls.minPolarAngle = 0
+      this.controls.maxPolarAngle = 0
+    } else {
+      this.controls.minPolarAngle = Math.PI/6
+      this.controls.maxPolarAngle = Math.PI/2.1
+    }
+  }
+
   setLens(lens) {
-    let tween;
+    let tween = new TWEEN.Tween(this.clippingPlane)
     switch(lens) {
       case "GROUND":
-        tween = new TWEEN.Tween(this.clippingPlane)
+        this.switchControls(true)
         tween.to({ constant: -0.08 }, 100)
-        tween.start()
         break
       case "BASIC":
-        tween = new TWEEN.Tween(this.clippingPlane)
+        this.switchControls(false)
         tween.to({ constant: 2.5 }, 200)
-        tween.start()
         break
       case "CROSS":
-        tween = new TWEEN.Tween(this.clippingPlane)
+        this.switchControls(false)
         tween.to({ constant: 1.0 }, 200)
-        tween.start()
         break
       default:
         this.setClippingHeight(this.clippingHeight)
         break
     }
+    tween.start()
   }
 
   getRenderer(renderer) {
@@ -110,7 +121,7 @@ export default class Simple extends React.Component {
 
   componentDidMount() {
     const controls = new OrbitControls(this.refs.camera, document.getElementById('root'))
-    controls.minPolarAngle = Math.PI/6
+    controls.minPolarAngle = 0//Math.PI/6
     controls.maxPolarAngle = Math.PI/2.1
     controls.maxDistance = 9
     controls.minDistance = 4
