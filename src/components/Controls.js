@@ -10,12 +10,17 @@ class Controls extends React.Component {
     let gui = new dat.GUI()
 
     let editables = {
+      clippingHeight: this.props.clippingHeight,
       length: this.props.length,
       width: this.props.width,
       height: this.props.height,
       roofing: this.props.roofingMaterial,
       cladding: this.props.claddingMaterial
     }
+
+
+    let clippingHeight = gui.add(editables, 'clippingHeight', 0.1, 2.5).step(0.1)
+    clippingHeight.onChange(this.props.setClippingHeight)
 
     let length = gui.add(editables, 'length', 2, 10).step(0.3)
     length.onChange(this.props.setLength)

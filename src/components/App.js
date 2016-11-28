@@ -6,20 +6,29 @@ import HUD from './HUD'
 import Building from './Building'
 import Controls from './Controls'
 import Box from './Box'
+import GroundPlane from './GroundPlane'
+import LensButtons from './LensButtons'
+import TWEEN from 'tween.js'
 
 const OrbitControls = require('three-orbit-controls')(THREE)
 
 export default class Simple extends React.Component {
   constructor(props, context) {
     super(props, context)
-    this.state = {
-      cubeRotation: new THREE.Euler(),
-    }
+    // this.state = {
+    //   cubeRotation: new THREE.Euler()
+    // }
 
     this.mouse = new THREE.Vector2()
     this.raycaster = new THREE.Raycaster()
 
     this.cameraPosition = new THREE.Vector3(5, 5, 5)
+
+    this.clippingHeight = 2.5
+    this.clippingPlane = new THREE.Plane(new THREE.Vector3(0, -1, 0), this.clippingHeight)
+    this.spotlightPosition = new THREE.Vector3(-20,20,10)
+    this.spotlightLookAt = new THREE.Vector3(0,0,0)
+    this.ambientLightPosition = new THREE.Vector3(0,5,0)
 
     this._onAnimate = this._onAnimate.bind(this)
     this.getRenderer = this.getRenderer.bind(this)
@@ -27,14 +36,48 @@ export default class Simple extends React.Component {
     this.onMouseDown = this.onMouseDown.bind(this)
     this.onMouseMove = this.onMouseMove.bind(this)
     this.setMesh = this.setMesh.bind(this)
+    this.setClippingHeight = this.setClippingHeight.bind(this)
+    this.setLens = this.setLens.bind(this)
   }
 
   _onAnimate() {
     this.stats.update()
+    TWEEN.update()
+  }
+
+  setClippingHeight(value) {
+    if (this.clippingPlane) {
+      this.clippingPlane.constant = value
+    }
+  }
+
+  setLens(lens) {
+    let tween;
+    switch(lens) {
+      case "GROUND":
+        tween = new TWEEN.Tween(this.clippingPlane)
+        tween.to({ constant: -0.08 }, 100)
+        tween.start()
+        break
+      case "BASIC":
+        tween = new TWEEN.Tween(this.clippingPlane)
+        tween.to({ constant: 2.5 }, 200)
+        tween.start()
+        break
+      case "CROSS":
+        tween = new TWEEN.Tween(this.clippingPlane)
+        tween.to({ constant: 1.0 }, 200)
+        tween.start()
+        break
+      default:
+        this.setClippingHeight(this.clippingHeight)
+        break
+    }
   }
 
   getRenderer(renderer) {
     this.renderer = renderer
+    renderer.clippingPlanes = [this.clippingPlane]
   }
 
   componentWillMount() {
@@ -104,6 +147,7 @@ export default class Simple extends React.Component {
           height={height}
           onAnimate={this._onAnimate}
           onRendererUpdated={this.getRenderer}
+          shadowMapEnabled={true}
           antialias={true}
           clearColor={0xF6F6F6}>
           <scene>
@@ -116,11 +160,15 @@ export default class Simple extends React.Component {
               far={1000}
               position={this.cameraPosition}
             />
-            <Controls store={this.props.store} ref='controls' />
+            <ambientLight position={this.ambientLightPosition} intensity={1} />
+            <spotLight position={this.spotlightPosition} lookAt={this.spotlightLookAt} castShadow={true} intensity={0.3} />
             <Building store={this.props.store} setMesh={this.setMesh} />
+            <GroundPlane latlng="48.0618786, 9.607911" />
           </scene>
         </React3>
         <HUD store={this.props.store} />
+        <Controls store={this.props.store} clippingHeight={this.clippingHeight} setClippingHeight={this.setClippingHeight} ref='controls' />
+        <LensButtons setLens={this.setLens} />
       </div>
     )
   }

@@ -1,5 +1,7 @@
+// import undoable from 'redux-undo'
+
 const building = (state = {
-  roofing: "STEEL",
+  roofing: "EPDM",
   cladding: "LARCH",
   length: 5.0
 }, action) => {
@@ -14,5 +16,8 @@ const building = (state = {
       return state
   }
 }
+
+// export default undoable(building)
+// const undoableBuilding = undoable(building)
 
 export default building

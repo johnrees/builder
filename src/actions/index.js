@@ -6,7 +6,7 @@ export const setCosts = (data) => {
 
 export const getCosts = () => {
   return (dispatch) => {
-    axios.get(`${process.env.REACT_APP_API_HOST}/costings.json`)
+    axios.get(`${process.env.REACT_APP_API_HOST}/p/2/costings.json`)
       .then((response) => {
         dispatch(setCosts(response.data))
       }).catch((error) => {

@@ -4,5 +4,5 @@ import costs from './costs'
 import frame from './frame'
 
 export default combineReducers({
-  building, costs, frame
+  costs, frame, building
 })
