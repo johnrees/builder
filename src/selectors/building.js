@@ -1,9 +1,21 @@
 import { createSelector } from 'reselect'
 import THREE from 'three'
+import paper from 'paper'
+import {frame} from '../blueprint'
 
 const lengthSelector = state => state.building.length
 const frameWidthSelector = state => state.frame.width
 const frameHeightSelector = state => state.frame.height
+
+export const frameSelector = createSelector(
+  frameWidthSelector,
+  frameHeightSelector,
+  (width,height) => {
+    return frame(width, height)
+    // let re = /d="([^"]*)"/
+    // return re.exec( frame(width,height) )[1]
+  }
+)
 
 export const buildingAreaSelector = createSelector(
   lengthSelector,

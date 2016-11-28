@@ -10,11 +10,14 @@ import GroundPlane from './GroundPlane'
 import LensButtons from './LensButtons'
 import TWEEN from 'tween.js'
 
+import {frame} from '../blueprint'
+
 const OrbitControls = require('three-orbit-controls')(THREE)
 
 export default class Simple extends React.Component {
   constructor(props, context) {
     super(props, context)
+    console.log(frame(3,4))
     // this.state = {
     //   cubeRotation: new THREE.Euler()
     // }

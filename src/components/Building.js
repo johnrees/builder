@@ -1,13 +1,14 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { getData } from '../actions'
-import { bayCountSelector, claddingMaterialSelector, roofingMaterialSelector } from '../selectors/building'
+import { bayCountSelector, claddingMaterialSelector, roofingMaterialSelector, frameSelector } from '../selectors/building'
 import SVG from '../libs/SVG'
 import THREE from 'three'
 import FrameBox from './FrameBox'
 
 class Building extends React.Component {
   componentWillMount() {
+    // setTimeout(() => {this.props.getData()}, 10)
     this.props.getData()
   }
 
@@ -16,6 +17,7 @@ class Building extends React.Component {
       <group>
         <FrameBoxes bayCount={this.props.bayCount} length={this.props.length} />
         <Faces
+          path={this.props.frameSVG}
           setMesh={this.props.setMesh}
           claddingMaterial={this.props.claddingMaterial}
           roofingMaterial={this.props.roofingMaterial}
@@ -30,8 +32,6 @@ class Faces extends React.Component {
 
   constructor(props, context) {
     super(props, context)
-    var path = 'M0,411l-212,-163l0,-265l424,0l0,265z'
-    this.shape = new SVG().transformSVGPath(path, false)
     this.doUpdates = this.doUpdates.bind(this)
   }
 
@@ -66,6 +66,8 @@ class Faces extends React.Component {
   }
 
   render() {
+    var path = 'M0,400l150,-200l0,-200l-300,0l0,200z'
+    this.shape = new SVG().transformSVGPath(this.props.path, false)
     return (<object3D ref='group' />)
   }
 }
@@ -88,7 +90,8 @@ const mapStateToProps = (state) => ({
   frameHeight: state.frame.height,
   claddingMaterial: claddingMaterialSelector(state),
   roofingMaterial: roofingMaterialSelector(state),
-  bayCount: bayCountSelector(state)
+  bayCount: bayCountSelector(state),
+  frameSVG: frameSelector(state)
   // claddingColor: claddingColorSelector(state),
   // roofingColor: roofingColorSelector(state),
 })
