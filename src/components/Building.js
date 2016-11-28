@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { getCosts } from '../actions'
+import { getData } from '../actions'
 import { bayCountSelector, claddingMaterialSelector, roofingMaterialSelector } from '../selectors/building'
 import SVG from '../libs/SVG'
 import THREE from 'three'
@@ -8,7 +8,7 @@ import FrameBox from './FrameBox'
 
 class Building extends React.Component {
   componentWillMount() {
-    this.props.getCosts()
+    this.props.getData()
   }
 
   render() {
@@ -94,7 +94,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  getCosts: () => { dispatch(getCosts()) }
+  getData: () => { dispatch(getData()) }
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Building)

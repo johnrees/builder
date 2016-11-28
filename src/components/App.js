@@ -27,7 +27,7 @@ export default class Simple extends React.Component {
     this.clippingHeight = 2.5
     this.clippingPlane = new THREE.Plane(new THREE.Vector3(0, -1, 0), this.clippingHeight)
     this.spotlightPosition = new THREE.Vector3(-20,20,10)
-    this.spotlightLookAt = new THREE.Vector3(0,0,0)
+    this.spotlightLookAt = new THREE.Vector3(0,1,0)
     this.ambientLightPosition = new THREE.Vector3(0,5,0)
 
     this._onAnimate = this._onAnimate.bind(this)
@@ -159,11 +159,12 @@ export default class Simple extends React.Component {
               near={0.1}
               far={1000}
               position={this.cameraPosition}
+              lookAt={this.spotlightLookAt}
             />
             <ambientLight position={this.ambientLightPosition} intensity={1} />
             <spotLight position={this.spotlightPosition} lookAt={this.spotlightLookAt} castShadow={true} intensity={0.3} />
             <Building store={this.props.store} setMesh={this.setMesh} />
-            <GroundPlane latlng="48.0618786, 9.607911" />
+            <GroundPlane store={this.props.store} />
           </scene>
         </React3>
         <HUD store={this.props.store} />

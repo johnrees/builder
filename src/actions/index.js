@@ -1,14 +1,15 @@
 import axios from 'axios'
 
-export const setCosts = (data) => {
-  return { type: 'SET_COSTS', payload: data }
+export const setData = (data) => {
+  return { type: 'SET_DATA', payload: data }
 }
 
-export const getCosts = () => {
+export const getData = () => {
   return (dispatch) => {
-    axios.get(`${process.env.REACT_APP_API_HOST}/p/2/costings.json`)
+    let id = window.location.hash.match(/\d+/)[0]
+    axios.get(`${process.env.REACT_APP_API_HOST}/p/${id}.json`)
       .then((response) => {
-        dispatch(setCosts(response.data))
+        dispatch(setData(response.data))
       }).catch((error) => {
         console.log(error);
       })
