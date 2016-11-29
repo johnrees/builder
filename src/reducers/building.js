@@ -4,7 +4,8 @@ const building = (state = {
   roofing: "EPDM",
   cladding: "LARCH",
   length: 5.0,
-  hasRoom: false
+  hasRoom: false,
+  roomPosition: 2
 }, action) => {
   switch(action.type) {
     case 'SET_LENGTH':
@@ -15,6 +16,8 @@ const building = (state = {
       return { ...state, cladding: action.payload }
     case 'SET_HAS_ROOM':
       return { ...state, hasRoom: action.payload }
+    case 'SET_ROOM_POSITION':
+      return { ...state, roomPosition: action.payload }
     default:
       return state
   }

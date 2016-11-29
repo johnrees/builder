@@ -22,6 +22,12 @@ export const setHasRoom = (payload) => {
     payload: payload
   }
 }
+export const setRoomPosition = (payload) => {
+  return {
+    type: "SET_ROOM_POSITION",
+    payload: payload
+  }
+}
 
 export const setLength = (payload) => {
   return {

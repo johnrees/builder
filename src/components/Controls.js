@@ -1,12 +1,15 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { setLength, setFrameWidth, setFrameHeight, setRoofing, setCladding, setHasRoom } from '../actions'
+import { setLength, setFrameWidth, setFrameHeight, setRoofing, setCladding, setHasRoom, setRoomPosition } from '../actions'
+import { bayCountSelector } from '../selectors/building'
 import dat from 'dat-gui'
 
 class Controls extends React.Component {
 
   constructor(props, context) {
     super(props, context)
+
+    if (window.location.hash.match('locked')) return false
 
     let gui = new dat.GUI()
 
@@ -17,30 +20,38 @@ class Controls extends React.Component {
       height: this.props.height,
       roofing: this.props.roofingMaterial,
       cladding: this.props.claddingMaterial,
-      hasRoom: this.props.hasRoom
+      hasRoom: this.props.hasRoom,
+      roomPosition: this.props.roomPosition
     }
 
     let clippingHeight = gui.add(editables, 'clippingHeight', 0.1, 2.5).step(0.1)
     clippingHeight.onChange(this.props.setClippingHeight)
 
-    let length = gui.add(editables, 'length', 2, 10).step(0.3)
+    gui.add(window, 'showFrames')
+
+    let dimensions = gui.addFolder("Dimensions")
+    let length = dimensions.add(editables, 'length', 2, 10).step(0.3)
     length.onChange(this.props.setLength)
-
-    let hasRoom = gui.add(editables, 'hasRoom')
-    hasRoom.onChange(this.props.setHasRoom)
-
-    let width = gui.add(editables, 'width', 2, 4).step(0.1)
+    let width = dimensions.add(editables, 'width', 2, 4).step(0.1)
     width.onChange(this.props.setWidth)
-
-    let height = gui.add(editables, 'height', 2, 4).step(0.1)
+    let height = dimensions.add(editables, 'height', 2, 4).step(0.1)
     height.onChange(this.props.setHeight)
 
-    let roofing = gui.add(editables, 'roofing', { "STEEL (£25m²)": 'STEEL', "EPDM (£15m²)": 'EPDM', "NONE (£0)": 'NONE' })
+    let materials = gui.addFolder("Materials")
+    let roofing = materials.add(editables, 'roofing', { "STEEL (£25m²)": 'STEEL', "EPDM (£15m²)": 'EPDM', "NONE (£0)": 'NONE' })
     roofing.onChange(this.props.setRoofing)
-
-    let cladding = gui.add(editables, 'cladding',
+    let cladding = materials.add(editables, 'cladding',
       { "RECYCLED PLASTIC (£20m²)": 'RECYCLED_PLASTIC', "LARCH (£40m²)": 'LARCH', "WEATHERBOARD (£25m²)": 'WEATHERBOARD', "NONE (£0)": 'NONE' })
     cladding.onChange(this.props.setCladding)
+
+    let room = gui.addFolder('Room')
+    let hasRoom = room.add(editables, 'hasRoom')
+    hasRoom.onChange(this.props.setHasRoom)
+    let roomPosition = room.add(editables, 'roomPosition', 2, 6).step(1)
+    roomPosition.onChange((value) => {
+      if (value > this.props.bayCount-4) { return false }
+      this.props.setRoomPosition(value)
+    })
   }
 
   render() {
@@ -55,7 +66,9 @@ const mapStateToProps = (state) => ({
   height: state.frame.height,
   roofingMaterial: state.building.roofing,
   claddingMaterial: state.building.cladding,
-  hasRoom: state.building.hasRoom
+  hasRoom: state.building.hasRoom,
+  roomPosition: state.building.roomPosition,
+  bayCount: bayCountSelector(state)
 })
 
 const mapDispatchToProps = (dispatch) => ({
@@ -65,6 +78,7 @@ const mapDispatchToProps = (dispatch) => ({
   setRoofing: (value) => { dispatch(setRoofing(value)) },
   setCladding: (value) => { dispatch(setCladding(value)) },
   setHasRoom: (value) => { dispatch(setHasRoom(value)) },
+  setRoomPosition: (value) => { dispatch(setRoomPosition(value)) },
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Controls)

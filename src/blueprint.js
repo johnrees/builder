@@ -17,10 +17,10 @@ export const frame = (width,height) => {
   const h = height * 100
   const mainPoints = [
     [0,h],
-    [w/2,h/2],
+    [w/2,h*0.6],
     [w/2,0],
     [-w/2,0],
-    [-w/2,h/2]
+    [-w/2,h*0.6]
   ]
   var mainPath = connectPoints(mainPoints)
   return mainPath.exportSVG({ asString: false, bounds: null }).getAttribute('d')

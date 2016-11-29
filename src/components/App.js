@@ -1,15 +1,16 @@
 import React from 'react'
+import Provider from 'react-redux'
 import React3 from 'react-three-renderer'
 import THREE from 'three'
 import Stats from 'stats.js'
 import HUD from './HUD'
 import Building from './Building'
 import Controls from './Controls'
-import Box from './Box'
 import GroundPlane from './GroundPlane'
 import LensButtons from './LensButtons'
+import Arrows from './Arrows'
+import Balls from './Balls'
 import TWEEN from 'tween.js'
-
 import {frame} from '../blueprint'
 
 const OrbitControls = require('three-orbit-controls')(THREE)
@@ -17,13 +18,12 @@ const OrbitControls = require('three-orbit-controls')(THREE)
 export default class Simple extends React.Component {
   constructor(props, context) {
     super(props, context)
-    console.log(frame(3,4))
+    window.showFrames = false
+
+    // console.log(frame(3,4))
     // this.state = {
     //   cubeRotation: new THREE.Euler()
     // }
-
-    this.mouse = new THREE.Vector2()
-    this.raycaster = new THREE.Raycaster()
 
     this.cameraPosition = new THREE.Vector3(5, 5, 5)
 
@@ -33,15 +33,32 @@ export default class Simple extends React.Component {
     this.spotlightLookAt = new THREE.Vector3(0,1,0)
     this.ambientLightPosition = new THREE.Vector3(0,5,0)
 
+    this.balls = []
+    this.dragDirection = this.SELECTED = this.INTERSECTED = null
+    this.previousY = this.previousX = 0
+    this.MOUSE_STATE = "UP"
+    this.intersection = this.offset = new THREE.Vector3()
+    this.plane = new THREE.Plane()
+    this.mouse = new THREE.Vector2()
+    this.raycaster = new THREE.Raycaster()
+
     this._onAnimate = this._onAnimate.bind(this)
     this.getRenderer = this.getRenderer.bind(this)
     this.onWindowResize = this.onWindowResize.bind(this)
     this.onMouseDown = this.onMouseDown.bind(this)
     this.onMouseMove = this.onMouseMove.bind(this)
+    this.onMouseUp = this.onMouseUp.bind(this)
     this.setMesh = this.setMesh.bind(this)
     this.setClippingHeight = this.setClippingHeight.bind(this)
     this.setLens = this.setLens.bind(this)
     this.switchControls = this.switchControls.bind(this)
+    this.addBall = this.addBall.bind(this)
+  }
+
+  addBall(ball) {
+    // console.log("aaaaaa")
+    // console.log(ball)
+    this.balls.push(ball)
   }
 
   _onAnimate() {
@@ -104,22 +121,63 @@ export default class Simple extends React.Component {
   }
 
   onMouseMove(event) {
-    // // console.log(event)
-    // this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1
-    // this.mouse.y = - (event.clientY / window.innerHeight) * 2 + 1
-  }
-
-  onMouseDown(event) {
     this.mouse.x = ( event.clientX / this.renderer.domElement.width ) * 2 - 1
     this.mouse.y = - ( event.clientY / this.renderer.domElement.height ) * 2 + 1
     this.raycaster.setFromCamera( this.mouse, this.refs.camera )
-    // console.log(this.buildingMesh)
-    let intersects = this.raycaster.intersectObjects([this.buildingMesh])
-    if (intersects.length > 0) {
-      console.log(intersects[0] )
-      // intersects[0].face.materialIndex = 1
-      // intersects[0].object.geometry.colorsNeedUpdate = true
+
+    this.balls.map( (b) => { b.material.color.setHex( 0x000000 ) })
+
+    if (!this.dragDirection) {
+      let movementX = Math.abs(this.previousX - event.clientX)
+      let movementY = Math.abs(this.previousY - event.clientY)
+      if (movementX > 4 || movementY > 4) {
+        this.dragDirection = (movementX > movementY) ? 'Z' : 'Y';
+        // console.log("DRAG", this.dragDirection)
+      }
+      this.previousX = event.clientX
+      this.previousY = event.clientY
     }
+
+    // if (this.dragDirection && this.SELECTED) {
+      if (this.raycaster.ray.intersectPlane(this.plane, this.intersection)) {
+        if (this.SELECTED && this.dragDirection === 'Z') {
+          this.SELECTED.position.z = this.offset.z//.sub(this.intersection).z
+        }
+      }
+    // } else {
+
+    //   let intersects = this.raycaster.intersectObjects(this.balls)
+    //   if (intersects.length > 0) {
+    //     if (this.INTERSECTED != intersects[0].object) {
+    //       this.INTERSECTED = intersects[0].object
+    //       this.INTERSECTED.selected = true
+    //       // console.log(this.SELECTED)
+    //       this.plane.setFromNormalAndCoplanarPoint(
+    //         this.refs.camera.getWorldDirection(this.plane.normal),
+    //         this.INTERSECTED.position)
+    //     }
+    //   } else {
+    //     if ( this.INTERSECTED) { this.INTERSECTED.selected = false; }
+    //     this.INTERSECTED = null;
+    //   }
+    // }
+  }
+
+  onMouseUp(event) {
+    this.SELECTED = null
+    this.controls.enabled = true
+    this.dragDirection = null
+    // this.MOUSE_STATE = "UP"
+  }
+
+  onMouseDown(event) {
+    this.raycaster.setFromCamera(this.mouse, this.refs.camera)
+    let intersects = this.raycaster.intersectObjects(this.balls)
+    if (intersects.length > 0) {
+      this.controls.enabled = false
+      this.SELECTED = intersects[0].object
+    }
+    // this.MOUSE_STATE = "DOWN"
   }
 
   componentDidMount() {
@@ -131,11 +189,12 @@ export default class Simple extends React.Component {
     this.controls = controls
 
     this.stats = new Stats()
-    const container = document.getElementById('root')
-    container.appendChild(this.stats.domElement)
+    // const container = document.getElementById('root')
+    // container.appendChild(this.stats.domElement)
 
     window.addEventListener( 'resize', this.onWindowResize, false )
     document.addEventListener('mousedown', this.onMouseDown, false )
+    document.addEventListener('mouseup', this.onMouseUp, false )
     document.addEventListener('mousemove', this.onMouseMove, false )
   }
 
@@ -175,15 +234,33 @@ export default class Simple extends React.Component {
               position={this.cameraPosition}
               lookAt={this.spotlightLookAt}
             />
+
             <ambientLight position={this.ambientLightPosition} intensity={1} />
             <spotLight position={this.spotlightPosition} lookAt={this.spotlightLookAt} castShadow={true} intensity={0.3} />
-            <Building store={this.props.store} setMesh={this.setMesh} />
-            <GroundPlane store={this.props.store} />
+
+              <Balls store={this.props.store} ref="balls" addBall={this.addBall} />
+              <Building setMesh={this.setMesh} store={this.props.store} />
+              <GroundPlane store={this.props.store} />
+              <Arrows store={this.props.store} />
+
           </scene>
         </React3>
         <HUD store={this.props.store} />
         <Controls store={this.props.store} clippingHeight={this.clippingHeight} setClippingHeight={this.setClippingHeight} ref='controls' />
+        <LockedText />
         <LensButtons setLens={this.setLens} />
+      </div>
+    )
+  }
+}
+
+class LockedText extends React.Component {
+  render() {
+    if (!window.location.hash.match('locked')) return false
+    return(
+      <div id='locked-text'>
+        <img src="https://image.flaticon.com/icons/svg/44/44594.svg" role="presentation" />
+        LOCKED
       </div>
     )
   }

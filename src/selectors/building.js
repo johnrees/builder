@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect'
 import THREE from 'three'
-import paper from 'paper'
+// import paper from 'paper'
 import {frame} from '../blueprint'
 
 const lengthSelector = state => state.building.length
