@@ -20,6 +20,7 @@
     "redux-thunk": "^2.1.0",
     "redux-undo": "^0.6.1",
     "reselect": "^2.5.4",
+    "shallowequal": "^0.2.2",
     "stats.js": "^0.17.0",
     "three": "0.79.0",
     "three-orbit-controls": "^82.1.0",

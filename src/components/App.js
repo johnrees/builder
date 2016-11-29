@@ -72,7 +72,7 @@ export default class Simple extends React.Component {
     switch(lens) {
       case "GROUND":
         this.switchControls(true)
-        tween.to({ constant: -0.08 }, 100)
+        tween.to({ constant: 0.01 }, 100)
         break
       case "BASIC":
         this.switchControls(false)
@@ -80,7 +80,7 @@ export default class Simple extends React.Component {
         break
       case "CROSS":
         this.switchControls(false)
-        tween.to({ constant: 1.0 }, 200)
+        tween.to({ constant: 0.7 }, 200)
         break
       default:
         this.setClippingHeight(this.clippingHeight)

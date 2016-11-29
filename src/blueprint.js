@@ -2,11 +2,6 @@ import paper from 'paper'
 
 paper.setup()
 
-const blueprint = () => {
-  let rect = new paper.Path.Rectangle(10, 10, 100, 100)
-  return rect.exportSVG({ asString: true, bounds: null })
-}
-
 const connectPoints = (points, strokeWidth=1, strokeColor="#000", closePath=true) => {
   let shape = new paper.Path()
   shape.moveTo(points[0])
@@ -30,5 +25,3 @@ export const frame = (width,height) => {
   var mainPath = connectPoints(mainPoints)
   return mainPath.exportSVG({ asString: false, bounds: null }).getAttribute('d')
 }
-
-export default blueprint

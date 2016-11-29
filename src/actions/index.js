@@ -16,6 +16,13 @@ export const getData = () => {
   }
 }
 
+export const setHasRoom = (payload) => {
+  return {
+    type: "SET_HAS_ROOM",
+    payload: payload
+  }
+}
+
 export const setLength = (payload) => {
   return {
     type: "SET_LENGTH",

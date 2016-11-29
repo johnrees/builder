@@ -2,11 +2,14 @@ import React from 'react'
 import THREE from 'three'
 import SVG, { SCALE } from '../libs/SVG'
 import createFragment from 'react-addons-create-fragment'
+// import shallowequal from 'shallowequal'
+// class OptimisedComponent extends React.Component {
+//   shouldComponentUpdate(nextProps) {
+//     return !shallowequal(this.props, nextProps)
+//   }
+// }
 
 export default class FrameBox extends React.Component {
-  // shouldComponentUpdate(nextProps) {
-  //   return !shallowequal(this.props, nextProps)
-  // }
   constructor(props,state) {
     super(props,state)
     this.frames = createFragment({
@@ -14,6 +17,7 @@ export default class FrameBox extends React.Component {
       right: <Frame position={0.05} />
     })
   }
+
   render() {
     // console.log("FRAMEBOX")
     return (

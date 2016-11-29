@@ -28,7 +28,7 @@ export const buildingAreaSelector = createSelector(
 export const bayCountSelector = createSelector(
   lengthSelector,
   (length) => {
-    return Math.ceil(length/2)
+    return Math.ceil(length/1.2)
   }
 )
 

@@ -1,12 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { setLength, setFrameWidth, setFrameHeight, setRoofing, setCladding } from '../actions'
+import { setLength, setFrameWidth, setFrameHeight, setRoofing, setCladding, setHasRoom } from '../actions'
 import dat from 'dat-gui'
 
 class Controls extends React.Component {
 
   constructor(props, context) {
     super(props, context)
+
     let gui = new dat.GUI()
 
     let editables = {
@@ -15,15 +16,18 @@ class Controls extends React.Component {
       width: this.props.width,
       height: this.props.height,
       roofing: this.props.roofingMaterial,
-      cladding: this.props.claddingMaterial
+      cladding: this.props.claddingMaterial,
+      hasRoom: this.props.hasRoom
     }
-
 
     let clippingHeight = gui.add(editables, 'clippingHeight', 0.1, 2.5).step(0.1)
     clippingHeight.onChange(this.props.setClippingHeight)
 
     let length = gui.add(editables, 'length', 2, 10).step(0.3)
     length.onChange(this.props.setLength)
+
+    let hasRoom = gui.add(editables, 'hasRoom')
+    hasRoom.onChange(this.props.setHasRoom)
 
     let width = gui.add(editables, 'width', 2, 4).step(0.1)
     width.onChange(this.props.setWidth)
@@ -50,7 +54,8 @@ const mapStateToProps = (state) => ({
   width: state.frame.width,
   height: state.frame.height,
   roofingMaterial: state.building.roofing,
-  claddingMaterial: state.building.cladding
+  claddingMaterial: state.building.cladding,
+  hasRoom: state.building.hasRoom
 })
 
 const mapDispatchToProps = (dispatch) => ({
@@ -59,6 +64,7 @@ const mapDispatchToProps = (dispatch) => ({
   setHeight: (value) => { dispatch(setFrameHeight(value)) },
   setRoofing: (value) => { dispatch(setRoofing(value)) },
   setCladding: (value) => { dispatch(setCladding(value)) },
+  setHasRoom: (value) => { dispatch(setHasRoom(value)) },
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Controls)
