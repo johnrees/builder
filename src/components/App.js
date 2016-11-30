@@ -23,10 +23,6 @@ class Simple extends React.Component {
     super(props, context)
     window.showFrames = false
 
-    // this.state = {
-    //   cubeRotation: new THREE.Euler()
-    // }
-
     this.cameraPosition = new THREE.Vector3(5, 5, 5)
 
     this.clippingHeight = 2.5
@@ -82,9 +78,11 @@ class Simple extends React.Component {
       this.refs.camera.position.set(0,10,0)
       this.controls.minPolarAngle = 0
       this.controls.maxPolarAngle = 0
+      this.controls.enabled = false
     } else {
       this.controls.minPolarAngle = Math.PI/6
       this.controls.maxPolarAngle = Math.PI/2.1
+      this.controls.enabled = true
     }
   }
 
@@ -112,7 +110,9 @@ class Simple extends React.Component {
 
   getRenderer(renderer) {
     this.renderer = renderer
-    renderer.clippingPlanes = [this.clippingPlane]
+    this.renderer.localClippingEnabled = true
+    // this.refs.
+    // renderer.clippingPlanes = [this.clippingPlane]
   }
 
   componentWillMount() {
@@ -256,7 +256,7 @@ class Simple extends React.Component {
             <spotLight position={this.spotlightPosition} lookAt={this.spotlightLookAt} castShadow={true} intensity={0.3} />
 
             <Balls store={this.props.store} addBall={this.addBall} />
-            <Building setMesh={this.setMesh} store={this.props.store} />
+            <Building ref="building" setMesh={this.setMesh} store={this.props.store} clippingPlane={this.clippingPlane} />
             <GroundPlane store={this.props.store} />
             <GridPlane />
             <Arrows store={this.props.store} />

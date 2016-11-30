@@ -14,13 +14,12 @@ const store = createStore(
   )
 )
 
-
-// ReactDOM.render(
-//   <App store={store} />,
-//   document.getElementById('root')
-// )
-
 ReactDOM.render(
-  <Canvas />,
+  <App store={store} />,
   document.getElementById('root')
 )
+
+// ReactDOM.render(
+//   <Canvas />,
+//   document.getElementById('root')
+// )

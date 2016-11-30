@@ -6,6 +6,7 @@ import SVG from '../libs/SVG'
 import THREE from 'three'
 import FrameBox from './FrameBox'
 import Door from './Door'
+import InnerWall from './InnerWall'
 // import shallowequal from 'shallowequal'
 
 class OptimisedComponent extends React.Component {
@@ -24,6 +25,13 @@ class Building extends OptimisedComponent {
     // console.log("A")
     return (
       <group>
+        <InnerWall
+          position={new THREE.Vector3(0,0,0)}
+          width={4}
+          height={4}
+          length={0.1}
+          color={0xFF0000}
+          clippingPlane={this.props.clippingPlane} />
         <Door
           position={new THREE.Vector3(0.1,0.45,-this.props.length/2-0.1)}
           width={0.8}

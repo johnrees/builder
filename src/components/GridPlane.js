@@ -11,7 +11,7 @@ export default class GridPlane extends React.Component {
     return (
       <mesh rotation={this.rotation} position={this.position} receiveShadow={false} >
         <meshBasicMaterial color={0xCCCCCC} wireframe={true} side={THREE.DoubleSide} />
-        <planeGeometry width={14} height={14} widthSegments={24} heightSegments={24} />
+        <planeGeometry width={14} height={14} widthSegments={12} heightSegments={12} />
       </mesh>
     )
   }
