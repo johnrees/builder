@@ -36,9 +36,11 @@ class Simple extends React.Component {
     this.ambientLightPosition = new THREE.Vector3(0,5,0)
 
     this.balls = []
-    this.dragDirection = this.SELECTED = this.INTERSECTED = null
+    // this.dragDirection = null
+
+    this.SELECTED = this.INTERSECTED = null
     this.previousY = this.previousX = 0
-    this.MOUSE_STATE = "UP"
+    // this.MOUSE_STATE = "UP"
     this.intersection = this.offset = new THREE.Vector3()
     this.plane = new THREE.Plane()
     this.mouse = new THREE.Vector2()
@@ -126,7 +128,6 @@ class Simple extends React.Component {
     this.mouse.x = (event.clientX / this.renderer.domElement.width) * 2 - 1
     this.mouse.y = -(event.clientY / this.renderer.domElement.height) * 2 + 1
 
-
     if (this.SELECTED) {
       this.plane.setFromNormalAndCoplanarPoint(
         this.refs.camera.getWorldDirection(this.plane.normal),
@@ -178,20 +179,22 @@ class Simple extends React.Component {
   onMouseUp(event) {
     this.SELECTED = null
     this.controls.enabled = true
-    this.dragDirection = null
-    this.MOUSE_STATE = "UP"
+    // this.dragDirection = null
+    // this.MOUSE_STATE = "UP"
   }
 
   onMouseDown(event) {
     this.raycaster.setFromCamera(this.mouse, this.refs.camera)
-    let intersects = this.raycaster.intersectObjects(this.balls.map( (b) => { return b.refs.mesh }))
+    let intersects = this.raycaster.intersectObjects(this.balls.map(b => { return b.refs.mesh }))
     if (intersects.length > 0) {
+      console.log(intersects[0])
       this.controls.enabled = false
       this.SELECTED = intersects[0].object
-      intersects[0].object.material.color.setHex( 0xFF0000 )
-      intersects[0].refs.line.visible = false
+      this.SELECTED.object.refs.line.visible = true
+      this.SELECTED.object.material.color.setHex( 0xFF0000 )
+      // intersects[0].refs.line.visible = false
     }
-    this.MOUSE_STATE = "DOWN"
+    // this.MOUSE_STATE = "DOWN"
   }
 
   componentDidMount() {

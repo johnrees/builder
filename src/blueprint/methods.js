@@ -12,8 +12,9 @@ export const connectPoints = (points, strokeWidth=1, strokeColor="#000", closePa
   return shape
 }
 
-export const svg = (path) => {
-  return path.exportSVG({ asString: false, bounds: null }).getAttribute('d')
+export const svg = (path, onlyD=true) => {
+  let s = path.exportSVG({ asString: false, bounds: null }).getAttribute('d')
+  return onlyD ? s : '<path d="' + s + '" />'
 }
 
 export const offsetPoints = (points, delta) => {
@@ -39,6 +40,24 @@ export const unite = (array) => {
   return united
 }
 
+export const fill = (shape, color='black') => {
+  shape.fillColor = color
+  return shape
+}
+
+export const stroke = (shape, color='black') => {
+  shape.strokeColor = color
+  return shape
+}
+
+export const circle = (x, y, radius) => {
+  return new paper.Path.Circle(new paper.Point(x,y), radius)
+}
+
+export const rectangle = (x, y, width, height) => {
+  return new paper.Path.Rectangle(x, y, width, height)
+}
+
 export const clone = (n) => {
   return n.clone()
 }
@@ -48,4 +67,23 @@ export const compound = (array) => {
   return new paper.CompoundPath({
     children: _.map(arr,clone)
   })
+}
+
+export const divide = (a,b) => {
+  return (a.divide(b)).children[1]
+}
+
+export const chunkArray = (array, callback) => {
+  for (var i = 0, l = array.length; i < l; i++) {
+    callback.call(array, [ array[i], (i == array.length-1) ? array[0] : array[i+1] ])
+  }
+}
+
+export const intersect = (array) => {
+  let arr = _.flattenDeep(array)
+  let united = arr[0]
+  for (var i = 1; i < arr.length; i++) {
+    united = united.subtract(arr[i])
+  }
+  return united;
 }

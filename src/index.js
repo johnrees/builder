@@ -4,6 +4,8 @@ import { createStore, applyMiddleware, compose } from 'redux'
 import reducer from './reducers'
 import App from './components/App'
 import thunk from 'redux-thunk'
+import SVGFile from './components/SVGFile'
+import Canvas from './blueprint/canvas'
 
 const store = createStore(
   reducer, compose(
@@ -13,7 +15,12 @@ const store = createStore(
 )
 
 
+// ReactDOM.render(
+//   <App store={store} />,
+//   document.getElementById('root')
+// )
+
 ReactDOM.render(
-  <App store={store} />,
+  <Canvas />,
   document.getElementById('root')
 )

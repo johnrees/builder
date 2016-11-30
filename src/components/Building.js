@@ -5,6 +5,7 @@ import { bayCountSelector, claddingMaterialSelector, roofingMaterialSelector, fr
 import SVG from '../libs/SVG'
 import THREE from 'three'
 import FrameBox from './FrameBox'
+import Door from './Door'
 // import shallowequal from 'shallowequal'
 
 class OptimisedComponent extends React.Component {
@@ -23,6 +24,18 @@ class Building extends OptimisedComponent {
     // console.log("A")
     return (
       <group>
+        <Door
+          position={new THREE.Vector3(0.1,0.45,-this.props.length/2-0.1)}
+          width={0.8}
+          height={0.8}
+          length={0.04}
+          color={0x000000} />
+        <Door
+          position={new THREE.Vector3(-0.1,0.45,this.props.length/2+0.1)}
+          width={0.8}
+          height={0.8}
+          length={0.04}
+          color={0x000000} />
         <FrameBoxes
           bayCount={this.props.bayCount} length={this.props.length} />
         <Faces
