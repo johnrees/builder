@@ -31,19 +31,21 @@ class Building extends OptimisedComponent {
           height={4}
           length={0.1}
           color={0xFF0000}
-          clippingPlane={this.props.clippingPlane} />
+          />
         <Door
           position={new THREE.Vector3(0.1,0.45,-this.props.length/2-0.1)}
           width={0.8}
           height={0.8}
           length={0.04}
-          color={0x000000} />
+          color={0x000000}
+          />
         <Door
           position={new THREE.Vector3(-0.1,0.45,this.props.length/2+0.1)}
           width={0.8}
           height={0.8}
           length={0.04}
-          color={0x000000} />
+          color={0x000000}
+          />
         <FrameBoxes
           bayCount={this.props.bayCount} length={this.props.length} />
         <Faces
@@ -52,13 +54,15 @@ class Building extends OptimisedComponent {
           claddingMaterial={this.props.claddingMaterial}
           roofingMaterial={this.props.roofingMaterial}
           bayCount={this.props.bayCount}
-          length={this.props.length} />
+          length={this.props.length}
+          />
         <Room
           roomPosition={this.props.roomPosition}
           path={this.props.frameSVG}
           bayCount={this.props.bayCount}
           hasRoom={this.props.hasRoom}
-          length={this.props.length} />
+          length={this.props.length}
+          />
       </group>
     )
   }
@@ -97,6 +101,7 @@ class Faces extends OptimisedComponent {
   componentDidMount() {
     this.group = this.refs.group
     this.doUpdates(this.props)
+    // this.refs.material.clippingPlanes= [this.props.clippingPlane]
   }
 
   doUpdates(nextProps) {

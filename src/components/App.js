@@ -110,9 +110,9 @@ class Simple extends React.Component {
 
   getRenderer(renderer) {
     this.renderer = renderer
-    this.renderer.localClippingEnabled = true
+    // this.renderer.localClippingEnabled = true
     // this.refs.
-    // renderer.clippingPlanes = [this.clippingPlane]
+    renderer.clippingPlanes = [this.clippingPlane]
   }
 
   componentWillMount() {
@@ -136,7 +136,7 @@ class Simple extends React.Component {
 
     this.balls.map( (b) => {
       return b.refs.mesh === this.SELECTED ?
-        b.refs.mesh.material.color.setHex( 0xFF0000 ) :
+        b.refs.mesh.material.color.setHex( 0x3CDB50 ) :
         b.refs.mesh.material.color.setHex( 0x000000 )
     })
 
@@ -175,6 +175,19 @@ class Simple extends React.Component {
     }
 
 
+    let intersects = this.raycaster.intersectObjects(this.balls.map(b => { return b.refs.mesh }))
+    if (intersects.length > 0) {
+      if (this.SELECTED) {
+        this.renderer.domElement.style.cursor = '-webkit-grabbing'
+      } else {
+        this.renderer.domElement.style.cursor = '-webkit-grab'
+      }
+    } else if (!this.SELECTED) {
+      this.renderer.domElement.style.cursor = 'auto'
+    }
+
+    // cursor: move; cursor: grab; cursor: -moz-grab; cursor: -webkit-grab;
+
   }
 
   onMouseUp(event) {
@@ -188,10 +201,11 @@ class Simple extends React.Component {
     this.raycaster.setFromCamera(this.mouse, this.refs.camera)
     let intersects = this.raycaster.intersectObjects(this.balls.map(b => { return b.refs.mesh }))
     if (intersects.length > 0) {
+      this.renderer.domElement.style.cursor = '-webkit-grabbing'
       console.log(intersects[0])
       this.controls.enabled = false
       this.SELECTED = intersects[0].object
-      this.SELECTED.object.refs.line.visible = true
+      // this.SELECTED.object.refs.line.visible = true
       this.SELECTED.object.material.color.setHex( 0xFF0000 )
       // intersects[0].refs.line.visible = false
     }

@@ -4,6 +4,7 @@ import THREE from 'three'
 
 class Arrows extends React.Component {
   render() {
+    return false
     let quarterLength = this.props.length/4
     let quarterWidth = this.props.width/4
     let lengthLine = [
