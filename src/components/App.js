@@ -155,16 +155,16 @@ class Simple extends React.Component {
     if (this.SELECTED && this.raycaster.ray.intersectPlane(this.plane, this.intersection)) {
       // if (this.SELECTED && this.dragDirection === 'Z') {
       // console.log(this.intersection, this.offset)
-      this.SELECTED.position[this.SELECTED.name] = this.offset[this.SELECTED.name]
+      this.SELECTED.position[this.SELECTED.name] = Math.min(Math.max(this.offset[this.SELECTED.name],0.5),2)
       switch(this.SELECTED.name) {
         case 'z':
-          this.props.setLength(this.offset.z*4)
+          this.props.setLength(this.SELECTED.position[this.SELECTED.name]*4)
           break
         case 'y':
-          this.props.setFrameHeight(this.offset.y*2)
+          this.props.setFrameHeight(this.SELECTED.position[this.SELECTED.name]*2)
           break
         case 'x':
-          this.props.setFrameWidth(this.offset.x*4)
+          this.props.setFrameWidth(this.SELECTED.position[this.SELECTED.name]*4)
           break
         default:
           console.log("NO")
