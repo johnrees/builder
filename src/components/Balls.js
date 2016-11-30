@@ -10,7 +10,7 @@ class Balls extends React.Component {
         addBall={this.props.addBall}
         key="front"
         linePoint={new THREE.Vector3(0,0,5)}
-        position={new THREE.Vector3(0,this.props.height,this.props.length+0.1)} />,
+        position={new THREE.Vector3(0,this.props.height,this.props.length)} />,
 
       <Ball name='y'
         addBall={this.props.addBall}
@@ -22,7 +22,7 @@ class Balls extends React.Component {
         addBall={this.props.addBall}
         key="back"
         linePoint={new THREE.Vector3(5,0,0)}
-        position={new THREE.Vector3(this.props.width,this.props.height*0.6,-this.props.length-0.1)} />,
+        position={new THREE.Vector3(this.props.width,this.props.height*0.6,-this.props.length)} />,
     ]
     return <group>{balls}</group>
   }
