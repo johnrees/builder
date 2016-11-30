@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { setLength, setFrameWidth, setFrameHeight, setRoofing, setCladding, setHasRoom, setRoomPosition } from '../actions'
+import { setLength, setFrameWidth, setFrameHeight, setRoofing, setCladding, setHasRoom, setRoomPosition, getTotalsAsync } from '../actions'
 import { bayCountSelector } from '../selectors/building'
 import dat from 'dat-gui'
 
@@ -23,6 +23,12 @@ class Controls extends React.Component {
       roomPosition: this.props.roomPosition
     }
 
+    let vals = {
+      length: this.props.length,
+      width: this.props.width,
+      height: this.props.height
+    }
+
     let clippingHeight = gui.add(editables, 'clippingHeight', 0.1, 2.5).step(0.1)
     clippingHeight.onChange(this.props.setClippingHeight)
 
@@ -30,11 +36,23 @@ class Controls extends React.Component {
 
     let dimensions = gui.addFolder("Dimensions")
     let length = dimensions.add(editables, 'length', 2, 10).step(0.3)
-    length.onChange(this.props.setLength)
+    // length.onChange(this.props.setLength)
+    length.onChange( (v) => {
+      this.props.setLength(v)
+      this.props.getTotalsAsync(vals)
+    })
     let width = dimensions.add(editables, 'width', 2, 4).step(0.1)
-    width.onChange(this.props.setWidth)
+    // width.onChange(this.props.setWidth)
+    width.onChange( (v) => {
+      this.props.setWidth(v)
+      this.props.getTotalsAsync(vals)
+    })
     let height = dimensions.add(editables, 'height', 2, 4).step(0.1)
-    height.onChange(this.props.setHeight)
+    // height.onChange(this.props.setHeight)
+    height.onChange( (v) => {
+      this.props.setHeight(v)
+      this.props.getTotalsAsync(vals)
+    })
 
     let materials = gui.addFolder("Materials")
     let roofing = materials.add(editables, 'roofing', { "STEEL (£25m²)": 'STEEL', "EPDM (£15m²)": 'EPDM', "NONE (£0)": 'NONE' })
@@ -72,6 +90,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   setLength: (value) => { dispatch(setLength(value)) },
+  getTotalsAsync: (value) => { dispatch(getTotalsAsync(value)) },
   setWidth: (value) => { dispatch(setFrameWidth(value)) },
   setHeight: (value) => { dispatch(setFrameHeight(value)) },
   setRoofing: (value) => { dispatch(setRoofing(value)) },

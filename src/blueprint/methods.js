@@ -75,7 +75,7 @@ export const divide = (a,b) => {
 
 export const chunkArray = (array, callback) => {
   for (var i = 0, l = array.length; i < l; i++) {
-    callback.call(array, [ array[i], (i == array.length-1) ? array[0] : array[i+1] ])
+    callback.call(array, [ array[i], (i === array.length-1) ? array[0] : array[i+1] ])
   }
 }
 

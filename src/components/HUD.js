@@ -23,7 +23,7 @@ class HUD extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  total: state.data.costings.total,
+  total: state.building.total,
   area: buildingAreaSelector(state),
   roofArea: roofingAreaSelector(state),
   roofTotal: roofingTotalSelector(state),

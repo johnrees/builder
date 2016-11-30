@@ -1,14 +1,15 @@
 import React from "react"
 import THREE from 'three'
-import { connect } from "react-redux"
+// import { connect } from "react-redux"
 
 class InnerWall extends React.Component {
 
   componentDidMount() {
-    this.refs.material.clippingPlanes= [this.props.clippingPlane]
+    // this.refs.material.clippingPlanes= [this.props.clippingPlane]
   }
 
   render() {
+    return false
     return (
       <mesh position={this.props.position}>
         <boxGeometry

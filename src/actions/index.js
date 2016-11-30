@@ -16,6 +16,13 @@ export const getData = () => {
   }
 }
 
+export const getTotalsAsync = (payload) => {
+  return {
+    type: "GET_TOTALS_ASYNC",
+    payload: payload
+  }
+}
+
 export const setHasRoom = (payload) => {
   return {
     type: "SET_HAS_ROOM",

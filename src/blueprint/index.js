@@ -32,8 +32,8 @@ export const outer = (width,height) => {
   const mainPath = M.connectPoints(mainPoints)
   // const innerPoints = M.offsetPoints(mainPoints, -16.5)
   // const innerPath = M.connectPoints(innerPoints)
-  const outerPoints = M.offsetPoints(mainPoints, 16.5)
-  const outerPath = M.connectPoints(outerPoints)
+  // const outerPoints = M.offsetPoints(mainPoints, 16.5)
+  // const outerPath = M.connectPoints(outerPoints)
   return M.svg(mainPath)
 }
 
@@ -82,7 +82,7 @@ export const frameBox = (width, height, frameThickness=11) => {
     let point2 = allPoints[allPoints.length/2]
     let c = point1.subtract(point2)
     let length = c.length
-    let finalPoints = allPoints
+    // let finalPoints = allPoints
     point = point2.add(c.multiply(0.5))
     // M.fill(M.circle(point.x, point.y, 1), 'black')
 
@@ -117,6 +117,7 @@ export const frameBox = (width, height, frameThickness=11) => {
         cutLines.push(cutLine)
       }
     }
+    return true
 
   })
 

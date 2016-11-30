@@ -5,9 +5,12 @@ const building = (state = {
   cladding: "LARCH",
   length: 5.0,
   hasRoom: false,
-  roomPosition: 2
+  roomPosition: 2,
+  total: 0
 }, action) => {
   switch(action.type) {
+    case 'SET_TOTAL':
+      return { ...state, total: action.payload }
     case 'SET_LENGTH':
       return { ...state, length: action.payload }
     case 'SET_ROOFING':

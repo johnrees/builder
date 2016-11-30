@@ -13,7 +13,7 @@ import LensButtons from './LensButtons'
 import Arrows from './Arrows'
 import Balls from './Balls'
 import TWEEN from 'tween.js'
-import { setLength, setFrameHeight, setFrameWidth } from '../actions'
+import { setLength, setFrameHeight, setFrameWidth, getTotalsAsync } from '../actions'
 
 
 const OrbitControls = require('three-orbit-controls')(THREE)
@@ -171,6 +171,7 @@ class Simple extends React.Component {
           console.log("NO")
           break
       }
+      this.props.getTotalsAsync({length: this.props.length, width: this.props.width, height: this.props.height})
     }
 
 
@@ -286,9 +287,13 @@ class LockedText extends React.Component {
 
 
 const mapStateToProps = (state) => ({
+  length: state.building.length,
+  width: state.frame.width,
+  height: state.frame.height
 })
 
 const mapDispatchToProps = (dispatch) => ({
+  getTotalsAsync: (value) => { dispatch(getTotalsAsync(value)) },
   setLength: (value) => { dispatch(setLength(value)) },
   setFrameHeight: (value) => { dispatch(setFrameHeight(value)) },
   setFrameWidth: (value) => { dispatch(setFrameWidth(value)) },
