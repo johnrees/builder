@@ -20,7 +20,7 @@ class Building extends OptimisedComponent {
   }
 
   render() {
-    console.log("A")
+    // console.log("A")
     return (
       <group>
         <FrameBoxes

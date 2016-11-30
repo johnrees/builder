@@ -8,7 +8,6 @@ class Controls extends React.Component {
 
   constructor(props, context) {
     super(props, context)
-
     if (window.location.hash.match('locked')) return false
 
     let gui = new dat.GUI()

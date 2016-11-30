@@ -5,8 +5,24 @@ import { connect } from 'react-redux'
 class Balls extends React.Component {
   render() {
     let balls = [
-      <Ball addBall={this.props.addBall} key="front" position={new THREE.Vector3(0,this.props.height,this.props.length+0.1)} />,
-      <Ball addBall={this.props.addBall} key="mid" position={new THREE.Vector3(0,this.props.height,0)} />
+
+      <Ball name='z'
+        addBall={this.props.addBall}
+        key="front"
+        linePoint={new THREE.Vector3(0,0,5)}
+        position={new THREE.Vector3(0,this.props.height,this.props.length+0.1)} />,
+
+      <Ball name='y'
+        addBall={this.props.addBall}
+        key="mid"
+        linePoint={new THREE.Vector3(0,5,0)}
+        position={new THREE.Vector3(0,this.props.height,0)} />,
+
+      <Ball name='x'
+        addBall={this.props.addBall}
+        key="back"
+        linePoint={new THREE.Vector3(5,0,0)}
+        position={new THREE.Vector3(this.props.width,this.props.height*0.6,-this.props.length-0.1)} />,
     ]
     return <group>{balls}</group>
   }
@@ -23,7 +39,8 @@ class Ball extends React.Component {
   }
 
   componentDidMount() {
-    this.props.addBall(this.refs.mesh)
+    this.props.addBall(this)
+    this.refs.line.visible = false
   }
 
   setSelected(bool) {
@@ -32,10 +49,16 @@ class Ball extends React.Component {
 
   render() {
     return (
-      <mesh ref="mesh" position={this.props.position}>
-        <sphereGeometry radius={0.15} widthSegments={32} heightSegments={32} />
-        <meshBasicMaterial color={this.state.selected ? 0xFF0000 : 0x000000} side={THREE.DoubleSide} />
-      </mesh>
+      <group>
+        <line ref="line">
+          <geometry vertices={[this.props.linePoint.add(this.props.position), this.props.position]} />
+          <meshBasicMaterial color={0x000000} />
+        </line>
+        <mesh ref="mesh" position={this.props.position} name={this.props.name}>
+          <sphereGeometry radius={0.15} widthSegments={32} heightSegments={32} />
+          <meshBasicMaterial color={this.state.selected ? 0xFF0000 : 0x000000} side={THREE.DoubleSide} />
+        </mesh>
+      </group>
     )
   }
 
@@ -43,7 +66,8 @@ class Ball extends React.Component {
 
 const mapStateToProps = (state) => ({
   length: state.building.length/4,
-  height: state.frame.height/2
+  height: state.frame.height/2,
+  width: state.frame.width/4
 })
 
 const mapDispatchToProps = (dispatch) => ({

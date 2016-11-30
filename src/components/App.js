@@ -1,5 +1,6 @@
 import React from 'react'
-import Provider from 'react-redux'
+// import Provider,{connect} from 'react-redux'
+import {connect} from 'react-redux'
 import React3 from 'react-three-renderer'
 import THREE from 'three'
 import Stats from 'stats.js'
@@ -7,20 +8,21 @@ import HUD from './HUD'
 import Building from './Building'
 import Controls from './Controls'
 import GroundPlane from './GroundPlane'
+import GridPlane from './GridPlane'
 import LensButtons from './LensButtons'
 import Arrows from './Arrows'
 import Balls from './Balls'
 import TWEEN from 'tween.js'
-import {frame} from '../blueprint'
+import { setLength, setFrameHeight, setFrameWidth } from '../actions'
+
 
 const OrbitControls = require('three-orbit-controls')(THREE)
 
-export default class Simple extends React.Component {
+class Simple extends React.Component {
   constructor(props, context) {
     super(props, context)
     window.showFrames = false
 
-    // console.log(frame(3,4))
     // this.state = {
     //   cubeRotation: new THREE.Euler()
     // }
@@ -121,63 +123,75 @@ export default class Simple extends React.Component {
   }
 
   onMouseMove(event) {
-    this.mouse.x = ( event.clientX / this.renderer.domElement.width ) * 2 - 1
-    this.mouse.y = - ( event.clientY / this.renderer.domElement.height ) * 2 + 1
-    this.raycaster.setFromCamera( this.mouse, this.refs.camera )
+    this.mouse.x = (event.clientX / this.renderer.domElement.width) * 2 - 1
+    this.mouse.y = -(event.clientY / this.renderer.domElement.height) * 2 + 1
 
-    this.balls.map( (b) => { b.material.color.setHex( 0x000000 ) })
 
-    if (!this.dragDirection) {
-      let movementX = Math.abs(this.previousX - event.clientX)
-      let movementY = Math.abs(this.previousY - event.clientY)
-      if (movementX > 4 || movementY > 4) {
-        this.dragDirection = (movementX > movementY) ? 'Z' : 'Y';
-        // console.log("DRAG", this.dragDirection)
-      }
-      this.previousX = event.clientX
-      this.previousY = event.clientY
+    if (this.SELECTED) {
+      this.plane.setFromNormalAndCoplanarPoint(
+        this.refs.camera.getWorldDirection(this.plane.normal),
+        this.SELECTED.position)
     }
 
-    // if (this.dragDirection && this.SELECTED) {
-      if (this.raycaster.ray.intersectPlane(this.plane, this.intersection)) {
-        if (this.SELECTED && this.dragDirection === 'Z') {
-          this.SELECTED.position.z = this.offset.z//.sub(this.intersection).z
-        }
-      }
-    // } else {
+    this.balls.map( (b) => {
+      return b.refs.mesh === this.SELECTED ?
+        b.refs.mesh.material.color.setHex( 0xFF0000 ) :
+        b.refs.mesh.material.color.setHex( 0x000000 )
+    })
 
-    //   let intersects = this.raycaster.intersectObjects(this.balls)
-    //   if (intersects.length > 0) {
-    //     if (this.INTERSECTED != intersects[0].object) {
-    //       this.INTERSECTED = intersects[0].object
-    //       this.INTERSECTED.selected = true
-    //       // console.log(this.SELECTED)
-    //       this.plane.setFromNormalAndCoplanarPoint(
-    //         this.refs.camera.getWorldDirection(this.plane.normal),
-    //         this.INTERSECTED.position)
-    //     }
-    //   } else {
-    //     if ( this.INTERSECTED) { this.INTERSECTED.selected = false; }
-    //     this.INTERSECTED = null;
+    this.raycaster.setFromCamera(this.mouse, this.refs.camera)
+
+    // if (!this.dragDirection) {
+    //   let movementX = Math.abs(this.previousX - event.clientX)
+    //   let movementY = Math.abs(this.previousY - event.clientY)
+    //   if (movementX > 4 || movementY > 4) {
+    //     this.dragDirection = (movementX > movementY) ? 'Z' : 'Y';
     //   }
+    //   this.previousX = event.clientX
+    //   this.previousY = event.clientY
+    //   return
     // }
+
+    if (this.SELECTED && this.raycaster.ray.intersectPlane(this.plane, this.intersection)) {
+      // if (this.SELECTED && this.dragDirection === 'Z') {
+      // console.log(this.intersection, this.offset)
+      this.SELECTED.position[this.SELECTED.name] = this.offset[this.SELECTED.name]
+      switch(this.SELECTED.name) {
+        case 'z':
+          this.props.setLength(this.offset.z*4)
+          break
+        case 'y':
+          this.props.setFrameHeight(this.offset.y*2)
+          break
+        case 'x':
+          this.props.setFrameWidth(this.offset.x*4)
+          break
+        default:
+          console.log("NO")
+          break
+      }
+    }
+
+
   }
 
   onMouseUp(event) {
     this.SELECTED = null
     this.controls.enabled = true
     this.dragDirection = null
-    // this.MOUSE_STATE = "UP"
+    this.MOUSE_STATE = "UP"
   }
 
   onMouseDown(event) {
     this.raycaster.setFromCamera(this.mouse, this.refs.camera)
-    let intersects = this.raycaster.intersectObjects(this.balls)
+    let intersects = this.raycaster.intersectObjects(this.balls.map( (b) => { return b.refs.mesh }))
     if (intersects.length > 0) {
       this.controls.enabled = false
       this.SELECTED = intersects[0].object
+      intersects[0].object.material.color.setHex( 0xFF0000 )
+      intersects[0].refs.line.visible = false
     }
-    // this.MOUSE_STATE = "DOWN"
+    this.MOUSE_STATE = "DOWN"
   }
 
   componentDidMount() {
@@ -189,8 +203,8 @@ export default class Simple extends React.Component {
     this.controls = controls
 
     this.stats = new Stats()
-    // const container = document.getElementById('root')
-    // container.appendChild(this.stats.domElement)
+    const container = document.getElementById('root')
+    container.appendChild(this.stats.domElement)
 
     window.addEventListener( 'resize', this.onWindowResize, false )
     document.addEventListener('mousedown', this.onMouseDown, false )
@@ -238,10 +252,11 @@ export default class Simple extends React.Component {
             <ambientLight position={this.ambientLightPosition} intensity={1} />
             <spotLight position={this.spotlightPosition} lookAt={this.spotlightLookAt} castShadow={true} intensity={0.3} />
 
-              <Balls store={this.props.store} ref="balls" addBall={this.addBall} />
-              <Building setMesh={this.setMesh} store={this.props.store} />
-              <GroundPlane store={this.props.store} />
-              <Arrows store={this.props.store} />
+            <Balls store={this.props.store} addBall={this.addBall} />
+            <Building setMesh={this.setMesh} store={this.props.store} />
+            <GroundPlane store={this.props.store} />
+            <GridPlane />
+            <Arrows store={this.props.store} />
 
           </scene>
         </React3>
@@ -265,3 +280,15 @@ class LockedText extends React.Component {
     )
   }
 }
+
+
+const mapStateToProps = (state) => ({
+})
+
+const mapDispatchToProps = (dispatch) => ({
+  setLength: (value) => { dispatch(setLength(value)) },
+  setFrameHeight: (value) => { dispatch(setFrameHeight(value)) },
+  setFrameWidth: (value) => { dispatch(setFrameWidth(value)) },
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Simple)
