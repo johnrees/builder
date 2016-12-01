@@ -53,3 +53,11 @@ body {
   height: 16px;
   margin-right: 7px;
 }
+
+#context-menu {
+  position: absolute;
+  z-index: 100;
+  background: red;
+  left: 20px;
+  top: 20px;
+}
