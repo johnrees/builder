@@ -14,7 +14,7 @@ import Arrows from './Arrows'
 import Balls from './Balls'
 import TWEEN from 'tween.js'
 import ContextMenu from './ContextMenu'
-import { setFrameData, setLength, setFrameHeight, setFrameWidth, getTotalsAsync, makeFramesAsync } from '../actions'
+import { setFrameData, setLength, setFrameHeight, setFrameWidth, getTotalsAsync, makeFramesAsync, getDataAsync } from '../actions'
 
 
 const OrbitControls = require('three-orbit-controls')(THREE)
@@ -22,6 +22,7 @@ const OrbitControls = require('three-orbit-controls')(THREE)
 class Simple extends React.Component {
   constructor(props, context) {
     super(props, context)
+    // this.props.getDataAsync({})
     window.showFrames = false
 
     this.cameraPosition = new THREE.Vector3(2.5,4,3)
@@ -151,9 +152,13 @@ class Simple extends React.Component {
     }
 
     this.balls.map( (b) => {
-      return b.refs.mesh === this.SELECTED ?
-        b.refs.mesh.material.color.setHex( 0x3CDB50 ) :
-        b.refs.mesh.material.color.setHex( 0x000000 )
+        if (b.refs.mesh === this.SELECTED) {
+          // b.refs.mesh.userData.line.visible = true
+          b.refs.mesh.material.color.setHex( 0x3CDB50 )
+        } else {
+          // intersects[0].object.userData.line.visible = false
+          b.refs.mesh.material.color.setHex( 0x000000 )
+        }
     })
 
     this.raycaster.setFromCamera(this.mouse, this.refs.camera)
@@ -172,19 +177,22 @@ class Simple extends React.Component {
     if (this.SELECTED && this.raycaster.ray.intersectPlane(this.plane, this.intersection)) {
       // if (this.SELECTED && this.dragDirection === 'Z') {
       // console.log(this.intersection, this.offset)
-      this.SELECTED.position[this.SELECTED.name] = Math.min(Math.max(this.offset[this.SELECTED.name],0.5),2)
+
       switch(this.SELECTED.name) {
         case 'z':
+          this.SELECTED.position[this.SELECTED.name] = Math.min(Math.max(this.offset[this.SELECTED.name],0.5),3)
           this.props.setLength(this.SELECTED.position[this.SELECTED.name]*4)
           break
         case 'y':
           this.props.setFrameData([])
           this.props.setFrameHeight(this.SELECTED.position[this.SELECTED.name]*2)
+          this.SELECTED.position[this.SELECTED.name] = Math.min(Math.max(this.offset[this.SELECTED.name],1),2)
           this.props.makeFramesAsync({width: this.props.width.toFixed(2), height: this.props.height.toFixed(2)})
           break
         case 'x':
           this.props.setFrameData([])
           this.props.setFrameWidth(this.SELECTED.position[this.SELECTED.name]*4)
+          this.SELECTED.position[this.SELECTED.name] = Math.min(Math.max(this.offset[this.SELECTED.name],0.8),1.4)
           this.props.makeFramesAsync({width: this.props.width.toFixed(2), height: this.props.height.toFixed(2)})
 
           break
@@ -196,9 +204,10 @@ class Simple extends React.Component {
     }
 
 
-    let intersects = this.raycaster.intersectObjects(this.balls.map(b => { return b.refs.mesh }))
+    let intersects = this.raycaster.intersectObjects(this.balls.map(b => { b.refs.line.visible = false; return b.refs.mesh }))
     if (intersects.length > 0) {
       intersects[0].object.material.color.setHex( 0x3CDB50 )
+      intersects[0].object.userData.line.visible = true
 
       if (this.SELECTED) {
         this.renderer.domElement.style.cursor = '-webkit-grabbing'
@@ -285,7 +294,6 @@ class Simple extends React.Component {
   }
 
   setMesh(mesh) {
-    console.log("MESH", mesh)
     this.buildingMesh = mesh
   }
 
@@ -365,6 +373,7 @@ const mapDispatchToProps = (dispatch) => ({
   setFrameWidth: (value) => { dispatch(setFrameWidth(value)) },
   makeFramesAsync: (value) => { dispatch(makeFramesAsync(value)) },
   setFrameData: (value) => { dispatch(setFrameData(value)) },
+  getDataAsync: (value) => { dispatch(getDataAsync(value)) },
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Simple)

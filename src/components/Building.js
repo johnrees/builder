@@ -1,9 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { getData } from '../actions'
+// import { getData } from '../actions'
 import { bayCountSelector, claddingMaterialSelector, roofingMaterialSelector, frameSelector } from '../selectors/building'
 
-import SVG, { SCALE } from '../libs/SVG'
+import SVG, { SCALE, DEGS_TO_RADS } from '../libs/SVG'
 import THREE from 'three'
 // import FrameBox from './FrameBox'
 import Door from './Door'
@@ -17,14 +17,69 @@ class OptimisedComponent extends React.Component {
   }
 }
 
+class Separator extends React.Component {
+  constructor(props, context) {
+    super(props, context)
+    var path = 'M0,25l0,-25l120,0l0,25z'
+    this.shape = new SVG().transformSVGPath(path)
+  }
+  render() {
+    return(
+      <mesh ref="mesh" position={this.props.position}>
+        <extrudeGeometry amount={4*SCALE} bevelEnabled={false}>
+          <shape>{this.shape}</shape>
+        </extrudeGeometry>
+        <meshBasicMaterial
+          color={0xff0000}
+          wireframe={false}
+        />
+      </mesh>
+    )
+  }
+}
+class Separators extends OptimisedComponent {
+  render() {
+    return false;
+
+    var seps = [];
+    var seps2 = [];
+    var count = 0;
+    for (var i = -4; i <= 3; i++) {
+      seps.push(<Separator key={count++} position={new THREE.Vector3(i,2,0)} />)
+      seps.push(<Separator key={count++} position={new THREE.Vector3(i,0,0)} />)
+      for (var j = -0.4; j <= 0.4; j+=0.1) {
+        seps.push(<Separator key={count++} position={new THREE.Vector3(i,0,j)} />)
+      }
+      seps2.push(<Separator key={count++} position={new THREE.Vector3(i,-1,-1)} />)
+      seps2.push(<Separator key={count++} position={new THREE.Vector3(i,1,-1)} />)
+      seps2.push(<Separator key={count++} position={new THREE.Vector3(i,-1,-0.1)} />)
+      seps2.push(<Separator key={count++} position={new THREE.Vector3(i,1,-0.1)} />)
+    }
+
+    return (
+      <group>
+      <object3D rotation={new THREE.Euler(0,90*DEGS_TO_RADS,0)}>
+        {seps}
+      </object3D>
+      <object3D rotation={new THREE.Euler(90*DEGS_TO_RADS,0,-90*DEGS_TO_RADS)}>
+        {seps2}
+      </object3D>
+      </group>
+    )
+  }
+}
+
 class Building extends OptimisedComponent {
   componentWillMount() {
-    this.props.getData()
+    // this.props.getData()
   }
 
   render() {
     return (
       <group>
+
+        <Separators />
+
         <InnerWall
           position={new THREE.Vector3(0,0,0)}
           width={4}
@@ -157,10 +212,6 @@ class FrameBox extends OptimisedComponent {
     super(props,state)
   }
 
-  componentDidMount() {
-    console.log("THING", this.props.frameData)
-  }
-
   render() {
     // console.log("FRAMEBOX")
     this.frames = createFragment({
@@ -229,7 +280,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  getData: () => { dispatch(getData()) }
+  // getData: () => { dispatch(getData()) }
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Building)

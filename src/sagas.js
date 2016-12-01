@@ -26,6 +26,32 @@ export function* watchMakeFrames() {
 
 
 
+export function* getDataAsync(action) {
+
+  const id = window.location.hash.match(/\d+/)[0]
+  const requestURL = `${process.env.REACT_APP_API_HOST}/p/${id}.json`
+  try {
+    const response = yield call(
+      request,
+      requestURL)
+
+    yield put({ type: 'SET_DATA', payload: response })
+    yield put({ type: 'SET_FRAME_HEIGHT', payload: response.merged_state.building.height })
+    yield put({ type: 'SET_FRAME_WIDTH', payload: response.merged_state.building.width })
+    yield put({ type: 'SET_LENGTH', payload: response.merged_state.building.length })
+    yield put({ type: 'SET_TOTAL', payload: response.merged_state.building.costings.total })
+
+    // yield call(console.log, response)
+  } catch (err) {
+  }
+}
+
+export function* watchGetDataAsync() {
+  yield takeLatest('GET_DATA_ASYNC', getDataAsync)
+}
+
+
+
 export function* getTotalsAsync(action) {
   yield delay(200)
 
@@ -57,6 +83,7 @@ export function* watchGetTotals() {
 export default function* rootSaga() {
   yield [
     watchGetTotals(),
-    watchMakeFrames()
+    watchMakeFrames(),
+    watchGetDataAsync()
   ]
 }

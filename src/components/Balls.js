@@ -41,7 +41,8 @@ class Ball extends React.Component {
 
   componentDidMount() {
     this.props.addBall(this)
-    // this.refs.line.visible = false
+    this.refs.mesh.userData = { line: this.refs.line }
+    this.refs.line.visible = false
   }
 
   setSelected(bool) {

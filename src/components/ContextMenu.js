@@ -10,17 +10,17 @@ class ContextMenu extends React.Component {
     if (this.props.menuType == "ROOFING") {
       links = (<ul>
         <li><h3>Roofing</h3></li>
-          <li onClick={() => this.props.setRoofing('STEEL')}>Steel</li>
-          <li onClick={() => this.props.setRoofing('EPDM')}>EPDM</li>
-          <li onClick={() => this.props.setRoofing('NONE')}>None</li>
+          <li onClick={() => this.props.setRoofing('STEEL')}>Steel<i>~£25m²</i></li>
+          <li onClick={() => this.props.setRoofing('EPDM')}>EPDM<i>~£15m²</i></li>
+          <li onClick={() => this.props.setRoofing('NONE')}>None<i>~£0</i></li>
         </ul>)
     } else {
       links = (<ul>
         <li><h3>Cladding</h3></li>
-          <li onClick={() => this.props.setCladding('RECYCLED_PLASTIC')}>Recycled Plastic</li>
-          <li onClick={() => this.props.setCladding('LARCH')}>Larch</li>
-          <li onClick={() => this.props.setCladding('WEATHERBOARD')}>Weatherboard</li>
-          <li onClick={() => this.props.setCladding('NONE')}>None</li>
+          <li onClick={() => this.props.setCladding('RECYCLED_PLASTIC')}>Recycled Plastic<i>~£20m²</i></li>
+          <li onClick={() => this.props.setCladding('LARCH')}>Larch<i>~£40m²</i></li>
+          <li onClick={() => this.props.setCladding('WEATHERBOARD')}>Weatherboard<i>~£25m²</i></li>
+          <li onClick={() => this.props.setCladding('NONE')}>None<i>£0</i></li>
         </ul>)
     }
     return(

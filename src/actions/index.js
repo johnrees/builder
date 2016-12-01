@@ -4,15 +4,22 @@ export const setData = (data) => {
   return { type: 'SET_DATA', payload: data }
 }
 
-export const getData = () => {
-  return (dispatch) => {
-    let id = window.location.hash.match(/\d+/)[0]
-    axios.get(`${process.env.REACT_APP_API_HOST}/p/${id}.json`)
-      .then((response) => {
-        dispatch(setData(response.data))
-      }).catch((error) => {
-        console.log(error);
-      })
+// export const getData = () => {
+//   return (dispatch) => {
+//     let id = window.location.hash.match(/\d+/)[0]
+//     axios.get(`${process.env.REACT_APP_API_HOST}/p/${id}.json`)
+//       .then((response) => {
+//         dispatch(setData(response.data))
+//       }).catch((error) => {
+//         console.log(error);
+//       })
+//   }
+// }
+
+export const getDataAsync = (payload) => {
+  return {
+    type: "GET_DATA_ASYNC",
+    payload: payload
   }
 }
 
