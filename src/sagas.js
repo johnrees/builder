@@ -9,7 +9,7 @@ export function* makeFramesAsync(action) {
   yield delay(200)
 
   const id = window.location.hash.match(/\d+/)[0]
-  const requestURL = `http://localhost:4000/basic/${action.payload.width}/${action.payload.height}`
+  const requestURL = `${process.env.REACT_APP_BEAVER_HOST}/${action.payload.width}/${action.payload.height}`
   try {
     const response = yield call(
       request,
