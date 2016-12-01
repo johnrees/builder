@@ -1,7 +1,8 @@
 const frame = (state = {
   width: 3,
   height: 3,
-  data: []
+  data: [
+  ]
 }, action) => {
   switch(action.type) {
     case 'SET_FRAME_DATA':

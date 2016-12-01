@@ -31,6 +31,9 @@ class Controls extends React.Component {
       height: this.props.height
     }
 
+    this.props.getTotalsAsync(vals)
+    this.props.makeFramesAsync(vals)
+
     let clippingHeight = gui.add(editables, 'clippingHeight', 0.1, 2.5).step(0.1)
     clippingHeight.onChange(this.props.setClippingHeight)
 
@@ -55,6 +58,8 @@ class Controls extends React.Component {
       this.props.setHeight(v)
       this.props.getTotalsAsync(vals)
     })
+
+
 
     let materials = gui.addFolder("Materials")
     let roofing = materials.add(editables, 'roofing', { "STEEL (£25m²)": 'STEEL', "EPDM (£15m²)": 'EPDM', "NONE (£0)": 'NONE' })
@@ -99,6 +104,7 @@ const mapDispatchToProps = (dispatch) => ({
   setCladding: (value) => { dispatch(setCladding(value)) },
   setHasRoom: (value) => { dispatch(setHasRoom(value)) },
   setRoomPosition: (value) => { dispatch(setRoomPosition(value)) },
+  makeFramesAsync: (value) => { dispatch(makeFramesAsync(value)) },
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Controls)
