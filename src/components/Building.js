@@ -62,15 +62,15 @@ class Separators extends OptimisedComponent {
     var count = 0;
     let color = 0x4285F4
 
-    seps.push(<Sep position={new THREE.Vector3(0,this.props.height/2,0)} width={this.props.length} height={0.15} depth={0.015} color={color} />)
+    seps.push(<Sep key={count++} position={new THREE.Vector3(0,this.props.height/2,0)} width={this.props.length} height={0.15} depth={0.015} color={color} />)
     for (var j = -this.props.width/2 + 0.3; j <= this.props.width/2 -0.3; j+=0.3) {
-      seps.push(<Sep position={new THREE.Vector3(0,0,j)} width={this.props.length} height={0.15} depth={0.015} color={color} />)
+      seps.push(<Sep key={count++} position={new THREE.Vector3(0,0,j)} width={this.props.length} height={0.15} depth={0.015} color={color} />)
     }
-    seps2.push(<Sep position={new THREE.Vector3(0,-this.props.width/2+0.02,-this.props.height*0.3+0.05)} width={this.props.length} height={0.15} depth={0.015} color={color} />)
-    seps2.push(<Sep position={new THREE.Vector3(0,this.props.width/2-0.02,-this.props.height*0.3+0.05)} width={this.props.length} height={0.15} depth={0.015} color={color} />)
+    seps2.push(<Sep key={count++} position={new THREE.Vector3(0,-this.props.width/2+0.02,-this.props.height*0.3+0.05)} width={this.props.length} height={0.15} depth={0.015} color={color} />)
+    seps2.push(<Sep key={count++} position={new THREE.Vector3(0,this.props.width/2-0.02,-this.props.height*0.3+0.05)} width={this.props.length} height={0.15} depth={0.015} color={color} />)
 
-    seps2.push(<Sep position={new THREE.Vector3(0,-this.props.width/2+0.02,-0.02)} width={this.props.length} height={0.15} depth={0.015} color={color} />)
-    seps2.push(<Sep position={new THREE.Vector3(0,this.props.width/2-0.02,-0.02)} width={this.props.length} height={0.15} depth={0.015} color={color} />)
+    seps2.push(<Sep key={count++} position={new THREE.Vector3(0,-this.props.width/2+0.02,-0.02)} width={this.props.length} height={0.15} depth={0.015} color={color} />)
+    seps2.push(<Sep key={count++} position={new THREE.Vector3(0,this.props.width/2-0.02,-0.02)} width={this.props.length} height={0.15} depth={0.015} color={color} />)
 
     return (
       <group>

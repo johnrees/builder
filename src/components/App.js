@@ -238,7 +238,7 @@ class Simple extends React.Component {
       this.controls.enabled = false
       this.SELECTED = intersects[0].object
       // this.SELECTED.object.refs.line.visible = true
-      this.SELECTED.object.material.color.setHex( 0xFF0000 )
+      this.SELECTED.material.color.setHex( 0xFF0000 )
       // intersects[0].refs.line.visible = false
     }
 
