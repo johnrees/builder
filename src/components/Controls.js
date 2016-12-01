@@ -11,6 +11,8 @@ class Controls extends React.Component {
     if (window.location.hash.match('locked')) return false
 
     let gui = new dat.GUI()
+    gui.closed = true
+    // dat.GUI.toggleHide()
 
     let editables = {
       clippingHeight: this.props.clippingHeight,

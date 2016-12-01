@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 
 class Balls extends React.Component {
   render() {
+    if (window.location.hash.match('locked')) return false
     let balls = [
 
       <Ball name='z'

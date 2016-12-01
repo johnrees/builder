@@ -47,7 +47,7 @@ class Building extends OptimisedComponent {
           color={0x000000}
           />
         <FrameBoxes
-          bayCount={this.props.bayCount} length={this.props.length} />
+          bayCount={this.props.bayCount} length={this.props.length} frameData={this.props.frameData} />
         <Faces
           path={this.props.frameSVG}
           setMesh={this.props.setMesh}
@@ -159,7 +159,8 @@ const mapStateToProps = (state) => ({
   bayCount: bayCountSelector(state),
   frameSVG: frameSelector(state),
   hasRoom: state.building.hasRoom,
-  roomPosition: state.building.roomPosition
+  roomPosition: state.building.roomPosition,
+  frameData: state.frame.data
   // claddingColor: claddingColorSelector(state),
   // roofingColor: roofingColorSelector(state),
 })

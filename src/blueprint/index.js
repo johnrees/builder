@@ -125,6 +125,8 @@ export const frameBox = (width, height, frameThickness=11) => {
   let hs = M.unite(holes)
   svgshape = M.intersect([svgshape, hs])
 
+  let svgdata = ""
+
   M.chunkArray(cutLines, function (slice){
     let splitShape = M.connectPoints([
       slice[0].segments[0].point,
@@ -135,8 +137,10 @@ export const frameBox = (width, height, frameThickness=11) => {
       slice[0].segments[1].point
     ])
     let p = M.divide(splitShape, svgshape)
-    console.log(M.svg(p, false))
+    svgdata += M.svg(p, false)
   })
+
+  return svgdata
 
   // M.fill(svgshape, 'black')
   // return M.fill(frame(width,height,frameThickness), 'green')

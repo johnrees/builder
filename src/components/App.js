@@ -13,6 +13,7 @@ import LensButtons from './LensButtons'
 import Arrows from './Arrows'
 import Balls from './Balls'
 import TWEEN from 'tween.js'
+import ContextMenu from './ContextMenu'
 import { setLength, setFrameHeight, setFrameWidth, getTotalsAsync } from '../actions'
 
 
@@ -33,6 +34,11 @@ class Simple extends React.Component {
 
     this.balls = []
     // this.dragDirection = null
+
+    this.state = {
+      left: 90,
+      top: 50
+    }
 
     this.SELECTED = this.INTERSECTED = null
     this.previousY = this.previousX = 0
@@ -212,8 +218,17 @@ class Simple extends React.Component {
     // this.MOUSE_STATE = "DOWN"
   }
 
+  onRightClick(event) {
+    // event.preventDefault()
+    console.log('event')
+    // event.preventDefault()
+    console.log('right click')
+  }
+
   componentDidMount() {
-    const controls = new OrbitControls(this.refs.camera, document.getElementById('root'))
+    const container = document.getElementById('root')
+
+    const controls = new OrbitControls(this.refs.camera, container)
     controls.minPolarAngle = 0//Math.PI/6
     controls.maxPolarAngle = Math.PI/2.1
     controls.maxDistance = 9
@@ -221,13 +236,13 @@ class Simple extends React.Component {
     this.controls = controls
 
     this.stats = new Stats()
-    const container = document.getElementById('root')
-    container.appendChild(this.stats.domElement)
+    // container.appendChild(this.stats.domElement)
 
     window.addEventListener( 'resize', this.onWindowResize, false )
     document.addEventListener('mousedown', this.onMouseDown, false )
     document.addEventListener('mouseup', this.onMouseUp, false )
     document.addEventListener('mousemove', this.onMouseMove, false )
+    document.addEventListener('contextmenu', this.onRightClick, false)
   }
 
   componentWillUnmount() {
@@ -282,6 +297,7 @@ class Simple extends React.Component {
         <Controls store={this.props.store} clippingHeight={this.clippingHeight} setClippingHeight={this.setClippingHeight} ref='controls' />
         <LockedText />
         <LensButtons setLens={this.setLens} />
+        <ContextMenu left={this.state.left} top={this.state.top} />
       </div>
     )
   }
