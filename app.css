@@ -83,6 +83,12 @@ body {
   cursor: auto !important;
 }
 
+#context-menu i {
+  color: #CCC;
+  padding-left: 40px;
+  float: right;
+}
+
 #context-menu:after
 {
 content: '';
