@@ -23,6 +23,18 @@ export const getTotalsAsync = (payload) => {
   }
 }
 
+export const makeFramesAsync = (payload) => {
+  return {
+    type: "MAKE_FRAMES_ASYNC",
+    payload: payload
+  }
+}
+export const setFrameData = (payload) => {
+  return {
+    type: "SET_FRAME_DATA",
+    payload: payload
+  }
+}
 export const setHasRoom = (payload) => {
   return {
     type: "SET_HAS_ROOM",

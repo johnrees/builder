@@ -32,9 +32,9 @@ export const outer = (width,height) => {
   const mainPath = M.connectPoints(mainPoints)
   // const innerPoints = M.offsetPoints(mainPoints, -16.5)
   // const innerPath = M.connectPoints(innerPoints)
-  // const outerPoints = M.offsetPoints(mainPoints, 16.5)
-  // const outerPath = M.connectPoints(outerPoints)
-  return M.svg(mainPath)
+  const outerPoints = M.offsetPoints(mainPoints, 16.5)
+  const outerPath = M.connectPoints(outerPoints)
+  return M.svg(outerPath)
 }
 
 // export const frame = (width, height, frameThickness) => {

@@ -17,7 +17,9 @@ class GroundPlane extends React.Component {
     return (this.props.textureURL !== null)
   }
   render() {
-    if (!this.mapIsPresent()) { return; }
+    // if (!this.mapIsPresent()) { return false; }
+    return false;
+
     // let textureURL = "https://maps.googleapis.com/maps/api/staticmap?center=53.3075188068184,-3.74711036682129&zoom=19&size=512x512&key=AIzaSyDtjm6A_jnLaGU2uA9oHTg6n1YYCmss8P8&path=color:0x00000000|weight:5|fillcolor:0xFFFF0033|53.307368155259276,-3.7472605705261235|53.30756688699132,-3.7473839521408085|53.30766945784595,-3.7469655275344853|53.30745790518829,-3.7468260526657104"
     // `https://www.mapquestapi.com/staticmap/v4/getmap?key=${this.mapquestToken}&type=map&size=${this.imgSize},${this.imgSize}&center=${this.props.latlng}&zoom=${this.mapZoom}`
     return (

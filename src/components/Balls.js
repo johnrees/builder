@@ -56,7 +56,7 @@ class Ball extends React.Component {
           <meshBasicMaterial color={0x000000} />
         </line>
         <mesh ref="mesh" position={this.props.position} name={this.props.name}>
-          <sphereGeometry radius={0.15} widthSegments={32} heightSegments={32} />
+          <sphereGeometry radius={0.18} widthSegments={32} heightSegments={32} />
           <meshBasicMaterial color={this.state.selected ? 0x3CDB50 : 0x000000} side={THREE.DoubleSide} />
         </mesh>
       </group>

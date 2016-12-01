@@ -9,7 +9,7 @@ export function* makeFramesAsync(action) {
   yield delay(200)
 
   const id = window.location.hash.match(/\d+/)[0]
-  const requestURL = `http://localhost:4000/basic/5/3.8`
+  const requestURL = `http://localhost:4000/basic/${action.payload.width}/${action.payload.height}`
   try {
     const response = yield call(
       request,

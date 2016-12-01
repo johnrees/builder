@@ -2,27 +2,27 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { getData } from '../actions'
 import { bayCountSelector, claddingMaterialSelector, roofingMaterialSelector, frameSelector } from '../selectors/building'
-import SVG from '../libs/SVG'
+
+import SVG, { SCALE } from '../libs/SVG'
 import THREE from 'three'
-import FrameBox from './FrameBox'
+// import FrameBox from './FrameBox'
 import Door from './Door'
 import InnerWall from './InnerWall'
-// import shallowequal from 'shallowequal'
+import createFragment from 'react-addons-create-fragment'
+import shallowequal from 'shallowequal'
 
 class OptimisedComponent extends React.Component {
-  // shouldComponentUpdate(nextProps) {
-  //   return !shallowequal(this.props, nextProps)
-  // }
+  shouldComponentUpdate(nextProps) {
+    return !shallowequal(this.props, nextProps)
+  }
 }
 
 class Building extends OptimisedComponent {
   componentWillMount() {
-    // setTimeout(() => {this.props.getData()}, 10)
     this.props.getData()
   }
 
   render() {
-    // console.log("A")
     return (
       <group>
         <InnerWall
@@ -137,15 +137,78 @@ class Faces extends OptimisedComponent {
 }
 
 class FrameBoxes extends OptimisedComponent {
+  componentDidMount() {
+  }
   render() {
-    if (!window.showFrames) return false
+    // if (!window.showFrames) return false
 
     this.frameboxes = []
     for (var i = 0; i <= this.props.bayCount; i++) {
       let position = (this.props.length/this.props.bayCount) * i - this.props.length/2
-      this.frameboxes.push(<FrameBox position={position} key={i} />)
+      this.frameboxes.push(<FrameBox position={position} key={i} frameData={this.props.frameData} />)
     }
     return (<group>{this.frameboxes}</group>)
+  }
+}
+
+
+class FrameBox extends OptimisedComponent {
+  constructor(props,state) {
+    super(props,state)
+  }
+
+  componentDidMount() {
+    console.log("THING", this.props.frameData)
+  }
+
+  render() {
+    // console.log("FRAMEBOX")
+    this.frames = createFragment({
+      left: <Frame position={-0.05} frameData={this.props.frameData}/>,
+      right: <Frame position={0.05} frameData={this.props.frameData}/>
+    })
+    return (
+      <object3D position={new THREE.Vector3(0,0,this.props.position)}>{this.frames}</object3D>
+    )
+  }
+}
+
+class Frame extends OptimisedComponent {
+  constructor(props, context) {
+    super(props, context)
+  }
+  render() {
+    return(
+      <group>
+        { this.props.frameData.map( (path, index) => <FrameSegment path={path} position={this.props.position} key={index} />)}
+      </group>
+    )
+  }
+}
+
+class FrameSegment extends OptimisedComponent {
+  constructor(props, context) {
+    super(props, context)
+  }
+  componentWillUpdate() {
+    this.refs.mesh.visible=true;
+  }
+  render() {
+    var path = this.props.path
+    this.shape = new SVG().transformSVGPath(path)
+    // console.log("FRAME SEGMENT")
+    // 0xdfd3c6
+    return(
+      <mesh position={new THREE.Vector3(0,0,this.props.position)} ref="mesh">
+        <extrudeGeometry amount={4*SCALE} bevelEnabled={false}>
+          <shape>{this.shape}</shape>
+        </extrudeGeometry>
+        <meshBasicMaterial
+          color={'yellow'}
+          wireframe={false}
+        />
+      </mesh>
+    )
   }
 }
 

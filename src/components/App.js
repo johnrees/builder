@@ -14,7 +14,7 @@ import Arrows from './Arrows'
 import Balls from './Balls'
 import TWEEN from 'tween.js'
 import ContextMenu from './ContextMenu'
-import { setLength, setFrameHeight, setFrameWidth, getTotalsAsync } from '../actions'
+import { setFrameData, setLength, setFrameHeight, setFrameWidth, getTotalsAsync, makeFramesAsync } from '../actions'
 
 
 const OrbitControls = require('three-orbit-controls')(THREE)
@@ -168,10 +168,15 @@ class Simple extends React.Component {
           this.props.setLength(this.SELECTED.position[this.SELECTED.name]*4)
           break
         case 'y':
+          this.props.setFrameData([])
           this.props.setFrameHeight(this.SELECTED.position[this.SELECTED.name]*2)
+          this.props.makeFramesAsync({width: this.props.width.toFixed(2), height: this.props.height.toFixed(2)})
           break
         case 'x':
+          this.props.setFrameData([])
           this.props.setFrameWidth(this.SELECTED.position[this.SELECTED.name]*4)
+          this.props.makeFramesAsync({width: this.props.width.toFixed(2), height: this.props.height.toFixed(2)})
+
           break
         default:
           console.log("NO")
@@ -183,6 +188,8 @@ class Simple extends React.Component {
 
     let intersects = this.raycaster.intersectObjects(this.balls.map(b => { return b.refs.mesh }))
     if (intersects.length > 0) {
+      intersects[0].object.material.color.setHex( 0x3CDB50 )
+
       if (this.SELECTED) {
         this.renderer.domElement.style.cursor = '-webkit-grabbing'
       } else {
@@ -327,6 +334,8 @@ const mapDispatchToProps = (dispatch) => ({
   setLength: (value) => { dispatch(setLength(value)) },
   setFrameHeight: (value) => { dispatch(setFrameHeight(value)) },
   setFrameWidth: (value) => { dispatch(setFrameWidth(value)) },
+  makeFramesAsync: (value) => { dispatch(makeFramesAsync(value)) },
+  setFrameData: (value) => { dispatch(setFrameData(value)) },
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Simple)

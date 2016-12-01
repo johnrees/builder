@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { setLength, setFrameWidth, setFrameHeight, setRoofing, setCladding, setHasRoom, setRoomPosition, getTotalsAsync } from '../actions'
+import { setLength, setFrameWidth, setFrameHeight, setRoofing, setCladding, setHasRoom, setRoomPosition, getTotalsAsync, makeFramesAsync } from '../actions'
 import { bayCountSelector } from '../selectors/building'
 import dat from 'dat-gui'
 
