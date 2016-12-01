@@ -16,7 +16,7 @@ class InnerWall extends React.Component {
           width={this.props.width}
           height={this.props.height}
           depth={this.props.length} />
-        <meshPhongMaterial color={this.props.color} side={THREE.DoubleSide} ref="material" />
+        <meshBasicMaterial color={this.props.color} side={THREE.DoubleSide} ref="material" />
       </mesh>
     )
   }

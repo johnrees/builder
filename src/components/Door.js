@@ -5,7 +5,9 @@ export default class Door extends React.Component {
   //   this.refs.material.clippingPlanes= [this.props.clippingPlane]
   // }
   render() {
+    return false
     return (
+
       <mesh position={this.props.position}>
         <boxGeometry
           width={this.props.width}

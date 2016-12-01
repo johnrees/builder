@@ -44,39 +44,39 @@ const MATERIALS = {
     'RECYCLED_PLASTIC': {
       cost: 20,
       color: '#5A554F',
-      material: (new THREE.MeshLambertMaterial({ color: '#5A554F', side: THREE.DoubleSide, opacity: 0.8, transparent: true }))
+      material: (new THREE.MeshLambertMaterial({ color: '#5A554F', side: THREE.DoubleSide, opacity: 1.0, transparent: true }))
     },
     'LARCH': {
       cost: 40,
       color: '#B7A98A',
-      material: (new THREE.MeshLambertMaterial({ color: '#B7A98A', side: THREE.DoubleSide, opacity: 0.8, transparent: true }))
+      material: (new THREE.MeshLambertMaterial({ color: '#B7A98A', side: THREE.DoubleSide, opacity: 1.0, transparent: true }))
     },
     'WEATHERBOARD': {
       cost: 25,
       color: '#C3C5C0',
-      material: (new THREE.MeshLambertMaterial({ color: '#C3C5C0', side: THREE.DoubleSide, opacity: 0.8, transparent: true }))
+      material: (new THREE.MeshLambertMaterial({ color: '#C3C5C0', side: THREE.DoubleSide, opacity: 1.0, transparent: true }))
     },
     'NONE': {
       cost: 0,
       color: 'red',
-      material: (new THREE.MeshLambertMaterial({ color: '#000000', side: THREE.DoubleSide, transparent: true, opacity: 0 }))
+      material: (new THREE.MeshLambertMaterial({ color: '#FFFFFF', side: THREE.DoubleSide, transparent: true, opacity: 0.6 }))
     }
   },
   ROOFING: {
     'STEEL': {
       cost: 25,
       color: '#B8B7BF',
-      material: (new THREE.MeshLambertMaterial({ color: '#B8B7BF', side: THREE.DoubleSide, opacity: 0.8, transparent: true }))
+      material: (new THREE.MeshLambertMaterial({ color: '#B8B7BF', side: THREE.DoubleSide, opacity: 1.0, transparent: true }))
     },
     'EPDM': {
       cost: 15,
       color: '#5B5D5C',
-      material: (new THREE.MeshLambertMaterial({ color: '#5B5D5C', side: THREE.DoubleSide, opacity: 0.8, transparent: true }))
+      material: (new THREE.MeshLambertMaterial({ color: '#5B5D5C', side: THREE.DoubleSide, opacity: 1.0, transparent: true }))
     },
     'NONE': {
       cost: 0,
       color: 'red',
-      material: (new THREE.MeshLambertMaterial({ color: '#000000', side: THREE.DoubleSide, transparent: true, opacity: 0 }))
+      material: (new THREE.MeshLambertMaterial({ color: '#FFFFFF', side: THREE.DoubleSide, transparent: true, opacity: 0.6 }))
     }
   }
 }

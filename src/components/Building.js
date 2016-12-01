@@ -37,33 +37,45 @@ class Separator extends React.Component {
     )
   }
 }
+
+class Sep extends React.Component {
+  render() {
+    return (
+      <mesh position={this.props.position}>
+        <boxGeometry
+          width={this.props.width}
+          height={this.props.height}
+          depth={this.props.depth} />
+        <meshBasicMaterial color={this.props.color} />
+      </mesh>
+    )
+  }
+}
+
+
 class Separators extends OptimisedComponent {
   render() {
-    return false;
+    // return false;
 
     var seps = [];
     var seps2 = [];
     var count = 0;
-    for (var i = -4; i <= 3; i++) {
-      seps.push(<Separator key={count++} position={new THREE.Vector3(i,2,0)} />)
-      seps.push(<Separator key={count++} position={new THREE.Vector3(i,0,0)} />)
-      for (var j = -0.4; j <= 0.4; j+=0.1) {
-        seps.push(<Separator key={count++} position={new THREE.Vector3(i,0,j)} />)
-      }
-      seps2.push(<Separator key={count++} position={new THREE.Vector3(i,-1,-1)} />)
-      seps2.push(<Separator key={count++} position={new THREE.Vector3(i,1,-1)} />)
-      seps2.push(<Separator key={count++} position={new THREE.Vector3(i,-1,-0.1)} />)
-      seps2.push(<Separator key={count++} position={new THREE.Vector3(i,1,-0.1)} />)
+    let color = 0x4285F4
+
+    seps.push(<Sep position={new THREE.Vector3(0,this.props.height/2,0)} width={this.props.length} height={0.15} depth={0.015} color={color} />)
+    for (var j = -this.props.width/2 + 0.3; j <= this.props.width/2 -0.3; j+=0.3) {
+      seps.push(<Sep position={new THREE.Vector3(0,0,j)} width={this.props.length} height={0.15} depth={0.015} color={color} />)
     }
+    seps2.push(<Sep position={new THREE.Vector3(0,-this.props.width/2+0.0,-this.props.height*0.3+0.05)} width={this.props.length} height={0.15} depth={0.015} color={color} />)
+    seps2.push(<Sep position={new THREE.Vector3(0,this.props.width/2-0.0,-this.props.height*0.3+0.05)} width={this.props.length} height={0.15} depth={0.015} color={color} />)
+
+    seps2.push(<Sep position={new THREE.Vector3(0,-this.props.width/2+0.02,-0.02)} width={this.props.length} height={0.15} depth={0.015} color={color} />)
+    seps2.push(<Sep position={new THREE.Vector3(0,this.props.width/2-0.02,-0.02)} width={this.props.length} height={0.15} depth={0.015} color={color} />)
 
     return (
       <group>
-      <object3D rotation={new THREE.Euler(0,90*DEGS_TO_RADS,0)}>
-        {seps}
-      </object3D>
-      <object3D rotation={new THREE.Euler(90*DEGS_TO_RADS,0,-90*DEGS_TO_RADS)}>
-        {seps2}
-      </object3D>
+      <object3D rotation={new THREE.Euler(0,90*DEGS_TO_RADS,0)}>{seps}</object3D>
+      <object3D rotation={new THREE.Euler(90*DEGS_TO_RADS,0,-90*DEGS_TO_RADS)}>{seps2}</object3D>
       </group>
     )
   }
@@ -78,7 +90,7 @@ class Building extends OptimisedComponent {
     return (
       <group>
 
-        <Separators />
+        <Separators height={this.props.frameHeight} width={this.props.frameWidth/2} length={this.props.length} />
 
         <InnerWall
           position={new THREE.Vector3(0,0,0)}
@@ -215,8 +227,8 @@ class FrameBox extends OptimisedComponent {
   render() {
     // console.log("FRAMEBOX")
     this.frames = createFragment({
-      left: <Frame position={-0.05} frameData={this.props.frameData}/>,
-      right: <Frame position={0.05} frameData={this.props.frameData}/>
+      left: <Frame position={-0.05} frameData={this.props.frameData} i={-1}/>,
+      right: <Frame position={0.05} frameData={this.props.frameData} i={1}/>
     })
     return (
       <object3D position={new THREE.Vector3(0,0,this.props.position)}>{this.frames}</object3D>
@@ -231,7 +243,11 @@ class Frame extends OptimisedComponent {
   render() {
     return(
       <group>
-        { this.props.frameData.map( (path, index) => <FrameSegment path={path} position={this.props.position} key={index} />)}
+        { this.props.frameData.map( (path, index) => <FrameSegment path={path} position={this.props.position} key={index} color='yellow' />)}
+        { this.props.frameData.map( (path, index) => {
+          if (index % 2 === 1) {
+            return <FrameSegment path={path} position={this.props.position-(0.02*this.props.i)} key={index} color='hotpink'/> }
+          })}
       </group>
     )
   }
@@ -255,7 +271,7 @@ class FrameSegment extends OptimisedComponent {
           <shape>{this.shape}</shape>
         </extrudeGeometry>
         <meshBasicMaterial
-          color={'white'}
+          color={this.props.color}
           wireframe={false}
         />
       </mesh>

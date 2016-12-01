@@ -186,7 +186,7 @@ class Simple extends React.Component {
         case 'y':
           this.props.setFrameData([])
           this.props.setFrameHeight(this.SELECTED.position[this.SELECTED.name]*2)
-          this.SELECTED.position[this.SELECTED.name] = Math.min(Math.max(this.offset[this.SELECTED.name],1),2)
+          this.SELECTED.position[this.SELECTED.name] = Math.min(Math.max(this.offset[this.SELECTED.name],1.3),2.3)
           this.props.makeFramesAsync({width: this.props.width.toFixed(2), height: this.props.height.toFixed(2)})
           break
         case 'x':
