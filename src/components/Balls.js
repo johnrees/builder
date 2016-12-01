@@ -10,19 +10,19 @@ class Balls extends React.Component {
       <Ball name='z'
         addBall={this.props.addBall}
         key="front"
-        linePoint={new THREE.Vector3(0,0,5)}
+        linePoint={new THREE.Vector3(0,0,2)}
         position={new THREE.Vector3(0,this.props.height,this.props.length)} />,
 
       <Ball name='y'
         addBall={this.props.addBall}
         key="mid"
-        linePoint={new THREE.Vector3(0,5,0)}
+        linePoint={new THREE.Vector3(0,2,0)}
         position={new THREE.Vector3(0,this.props.height,0)} />,
 
       <Ball name='x'
         addBall={this.props.addBall}
         key="back"
-        linePoint={new THREE.Vector3(5,0,0)}
+        linePoint={new THREE.Vector3(2,0,0)}
         position={new THREE.Vector3(this.props.width,this.props.height*0.6,-this.props.length)} />,
     ]
     return <group>{balls}</group>
@@ -41,7 +41,7 @@ class Ball extends React.Component {
 
   componentDidMount() {
     this.props.addBall(this)
-    this.refs.line.visible = false
+    // this.refs.line.visible = false
   }
 
   setSelected(bool) {

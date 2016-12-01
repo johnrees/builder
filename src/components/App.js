@@ -24,7 +24,7 @@ class Simple extends React.Component {
     super(props, context)
     window.showFrames = false
 
-    this.cameraPosition = new THREE.Vector3(5, 5, 5)
+    this.cameraPosition = new THREE.Vector3(2.5,4,3)
 
     this.clippingHeight = 2.5
     this.clippingPlane = new THREE.Plane(new THREE.Vector3(0, -1, 0), this.clippingHeight)
@@ -37,7 +37,10 @@ class Simple extends React.Component {
 
     this.state = {
       left: 90,
-      top: 50
+      top: 50,
+      showMenu: false,
+      menuType: 'ROOFING',
+      mapVisible: false
     }
 
     this.SELECTED = this.INTERSECTED = null
@@ -53,6 +56,7 @@ class Simple extends React.Component {
     this.onWindowResize = this.onWindowResize.bind(this)
     this.onMouseDown = this.onMouseDown.bind(this)
     this.onMouseMove = this.onMouseMove.bind(this)
+    this.onRightClick = this.onRightClick.bind(this)
     this.onMouseUp = this.onMouseUp.bind(this)
     this.setMesh = this.setMesh.bind(this)
     this.setClippingHeight = this.setClippingHeight.bind(this)
@@ -94,8 +98,14 @@ class Simple extends React.Component {
 
   setLens(lens) {
     let tween = new TWEEN.Tween(this.clippingPlane)
+    this.setState({
+      mapVisible: false
+    })
     switch(lens) {
       case "GROUND":
+        this.setState({
+          mapVisible: true
+        })
         this.switchControls(true)
         tween.to({ constant: 0.01 }, 100)
         break
@@ -222,18 +232,34 @@ class Simple extends React.Component {
       this.SELECTED.object.material.color.setHex( 0xFF0000 )
       // intersects[0].refs.line.visible = false
     }
+
+    this.setState({
+      showMenu: false
+    })
     // this.MOUSE_STATE = "DOWN"
   }
 
   onRightClick(event) {
+    console.log(event)
     // event.preventDefault()
-    console.log('event')
     // event.preventDefault()
-    console.log('right click')
+    console.log(this.buildingMesh)
+    this.raycaster.setFromCamera(this.mouse, this.refs.camera)
+    let intersects = this.raycaster.intersectObjects([this.buildingMesh])
+    if (intersects.length > 0) {
+      console.log()
+      this.setState({
+        left: event.clientX,
+        top: event.clientY,
+        showMenu: true,
+        menuType: (intersects[0].face.normal.y > 0 ? 'ROOFING' : 'CLADDING')
+      })
+    }
   }
 
   componentDidMount() {
     const container = document.getElementById('root')
+    const rcontainer = document.getElementById('react-container')
 
     const controls = new OrbitControls(this.refs.camera, container)
     controls.minPolarAngle = 0//Math.PI/6
@@ -246,10 +272,10 @@ class Simple extends React.Component {
     // container.appendChild(this.stats.domElement)
 
     window.addEventListener( 'resize', this.onWindowResize, false )
-    document.addEventListener('mousedown', this.onMouseDown, false )
-    document.addEventListener('mouseup', this.onMouseUp, false )
-    document.addEventListener('mousemove', this.onMouseMove, false )
-    document.addEventListener('contextmenu', this.onRightClick, false)
+    rcontainer.addEventListener('mousedown', this.onMouseDown, false )
+    rcontainer.addEventListener('mouseup', this.onMouseUp, false )
+    rcontainer.addEventListener('mousemove', this.onMouseMove, false )
+    rcontainer.addEventListener('contextmenu', this.onRightClick, false)
   }
 
   componentWillUnmount() {
@@ -259,6 +285,7 @@ class Simple extends React.Component {
   }
 
   setMesh(mesh) {
+    console.log("MESH", mesh)
     this.buildingMesh = mesh
   }
 
@@ -268,6 +295,7 @@ class Simple extends React.Component {
 
     return (
       <div id="container">
+        <div id="react-container">
         <React3
           mainCamera="camera"
           width={width}
@@ -294,7 +322,7 @@ class Simple extends React.Component {
 
             <Balls store={this.props.store} addBall={this.addBall} />
             <Building ref="building" setMesh={this.setMesh} store={this.props.store} clippingPlane={this.clippingPlane} />
-            <GroundPlane store={this.props.store} />
+            <GroundPlane store={this.props.store} mapVisible={this.state.mapVisible} />
             <GridPlane />
             <Arrows store={this.props.store} />
 
@@ -302,9 +330,10 @@ class Simple extends React.Component {
         </React3>
         <HUD store={this.props.store} />
         <Controls store={this.props.store} clippingHeight={this.clippingHeight} setClippingHeight={this.setClippingHeight} ref='controls' />
+        </div>
         <LockedText />
         <LensButtons setLens={this.setLens} />
-        <ContextMenu left={this.state.left} top={this.state.top} />
+        <ContextMenu left={this.state.left} top={this.state.top} store={this.props.store} showMenu={this.state.showMenu} menuType={this.state.menuType} />
       </div>
     )
   }

@@ -204,7 +204,7 @@ class FrameSegment extends OptimisedComponent {
           <shape>{this.shape}</shape>
         </extrudeGeometry>
         <meshBasicMaterial
-          color={'yellow'}
+          color={'white'}
           wireframe={false}
         />
       </mesh>
