@@ -8,7 +8,6 @@ import {frameBox} from './blueprint/index'
 export function* makeFramesAsync(action) {
   yield delay(200)
 
-  const id = window.location.hash.match(/\d+/)[0]
   const requestURL = `${process.env.REACT_APP_BEAVER_HOST}/basic/${action.payload.width}/${action.payload.height}`
   try {
     const response = yield call(
@@ -28,7 +27,7 @@ export function* watchMakeFrames() {
 
 export function* getDataAsync(action) {
 
-  const id = window.location.hash.match(/\d+/)[0]
+  const id = window.location.hash.split("/").pop()
   const requestURL = `${process.env.REACT_APP_API_HOST}/p/${id}.json`
   try {
     const response = yield call(
@@ -55,7 +54,7 @@ export function* watchGetDataAsync() {
 export function* getTotalsAsync(action) {
   yield delay(200)
 
-  const id = window.location.hash.match(/\d+/)[0]
+  const id = window.location.hash.split("/").pop()
   const requestURL = `${process.env.REACT_APP_API_HOST}/p/${id}/costings.json`
   try {
     const response = yield call(
