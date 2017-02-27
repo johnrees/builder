@@ -52,7 +52,7 @@ export function* watchGetDataAsync() {
 
 
 export function* getTotalsAsync(action) {
-  yield delay(200)
+  yield delay(100)
 
   const id = window.location.hash.split("/").pop()
   const requestURL = `${process.env.REACT_APP_API_HOST}/p/${id}/costings.json`
